@@ -1,0 +1,67 @@
+<div id="alert-success" class="alert alert-success" style="display:none" >
+	<strong>操作成功</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label id="successMsg" >$!successMsg</label>
+</div>
+<div id="alert-danger" class="alert alert-danger" style="display:none" >
+	<strong>操作失败</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label id="errorMsg" >$!errorMsg</label>
+</div>
+
+
+<div class="modal fade" id="alertModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content panel panel-danger">
+         <div class="modal-header panel-heading">
+            <h4 class="modal-title" id="alertModelTitle">模态框（Modal）标题</h4>
+         </div>
+         <div id="alerModelBody" class="modal-body">在这里添加一些文本</div>
+         <div class="modal-footer">
+            <button id="alertModelCloseBtn" type="button" class="btn btn-default" >关闭</button>
+         </div>
+		 
+      </div>
+   </div>
+</div>
+
+
+<script type="text/javascript">
+	function showSuccess(successMsg){
+		$("#successMsg").empty();
+		$("#successMsg").append(successMsg);
+		$("#alert-danger").hide();
+		$("#alert-success").show();
+	}
+	
+	function showError(errorMsg){
+		$("#errorMsg").empty();
+		$("#errorMsg").append(errorMsg);
+		$("#alert-success").hide();
+		$("#alert-danger").show();
+	}
+	
+	function showModelText(title, content, callback) {
+		$("#alertModel").modal();
+		
+		$("#alertModelTitle").empty();
+		$("#alertModelTitle").append(title);
+		
+		$("#alerModelBody").empty();
+		$("#alerModelBody").append(content);
+
+		$("#alertModelCloseBtn").one("click",function(){
+			$("#alertModel").modal('hide');
+			callback();
+		})
+	}
+	
+</script>
+
+#if("$!status" == "0")
+<script type="text/javascript">
+    showSuccess("$!successMsg");
+</script>
+#elseif("$!status" == "1")
+<script type="text/javascript">
+    showError("$!errorMsg");
+</script>
+#end
+
+

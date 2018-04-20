@@ -1,0 +1,85 @@
+#set($headerMenu = 'version')
+
+<style>
+    .versionspan {
+        display: inline-block;
+        width: 42px;
+        position: absolute;
+        left: -11px;
+        top: 5px;
+    }
+
+</style>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('breadcrumbs', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="${ac.contextPath}/dashboard">主面板</a>
+
+            <span class="divider">
+			<i class="icon-angle-right arrow-icon"></i>
+		</span>
+        </li>
+        <li class="active">版本管理</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    <div class="row-fluid">
+
+        <div class="widget-box ">
+            <div class="widget-header">
+                <h4 class="lighter smaller">
+                    <i class="icon-flag blue"></i>
+                    版本管理
+                </h4>
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main no-padding">
+                    <div class="dialogs">
+                        <div class="itemdiv dialogdiv">
+                            <div class="versionspan">
+                                <span class="label label-danger  arrowed-right"><strong>V1.0</strong></span>
+                            </div>
+                            <div class="body">
+                                <div class="time">
+                                    <i class="icon-time"></i>
+                                    <span class="green">2018年3月23日</span>
+                                </div>
+                                <div class="name">
+                                    <a>卢云</a>
+                                </div>
+                                <div class="text">
+                                    <ul class="list-unstyled spaced">
+                                        <li>
+                                            <i class="icon-ok bigger-110 green"></i>
+                                            实现基本功能
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#systemSpan").click();
+        $("#versionmenu").addClass("active");
+    });
+</script>

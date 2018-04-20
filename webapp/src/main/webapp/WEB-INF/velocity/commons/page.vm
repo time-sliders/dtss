@@ -1,0 +1,54 @@
+<script type="text/javascript">
+
+    function query(page) {
+        if (page != null) {
+            $("#page").val(page);
+        }
+        $("#searchForm").submit();
+    }
+
+    function submitForm(type, pNo) {
+        var no = $("#pageNo").attr("value");
+        if (type == 1 || type == 3) {
+            $("#pageNo").attr("value", 1);
+        } else if (type == 2) {
+            var txtPageNo = $("#txtPageNo").val();
+            if (null == txtPageNo || '' == txtPageNo) {
+                $("#pageNo").attr("value", 1);
+                txtPageNo = 1;
+            }
+            if (isNaN(txtPageNo)) {
+                alert("请输入数字");
+                $("#txtPageNo").attr("value", '');
+                return;
+            } else {
+                if (txtPageNo > ${query.pageCount}) {
+                    txtPageNo = ${query.pageCount}
+                } else {
+                    $("#pageNo").attr("value", txtPageNo);
+                }
+                if (txtPageNo < 1)
+                    $("#pageNo").attr("value", 1);
+            }
+        } else if (type == 4) {
+            no = parseInt(no) - 1;
+            if (no < 1) {
+                no = 1;
+            }
+            $("#pageNo").attr("value", no);
+        } else if (type == 5) {
+            no = parseInt(no) + 1;
+            if (no < 1) {
+                no = 1;
+            }
+            $("#pageNo").attr("value", no);
+        } else if (type == 6) {
+            var pageCount = $("#pageCount").attr("value");
+            $("#pageNo").attr("value", pageCount);
+        } else if (type == 7) {
+            $("#pageNo").attr("value", pNo);
+        }
+
+        $("#searchForm").submit();
+    }
+</script>

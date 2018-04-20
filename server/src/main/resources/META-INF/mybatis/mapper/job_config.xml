@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="JobConfig">
+
+    <resultMap id="BaseResultMap" type="JobConfig">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="app" property="app"/>
+        <result column="type" property="type"/>
+        <result column="trigger_mode" property="triggerMode"/>
+        <result column="cron" property="cron"/>
+        <result column="job_bean_name" property="jobBeanName"/>
+        <result column="client_ip" property="clientIp"/>
+        <result column="activity" property="isActivity"/>
+        <result column="description" property="description"/>
+        <result column="param" property="param"/>
+        <result column="owner_phone" property="ownerPhone"/>
+        <result column="version" property="version"/>
+        <result column="last_modify_time_long" property="lastModifyTimeLong"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,app,type,trigger_mode,
+        cron,job_bean_name,client_ip,activity,description,
+        param,owner_phone,version,last_modify_time_long,create_time,modify_time
+    </sql>
+
+    <select id="FIND_BY_ID" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from job_config where id = #{id}
+    </select>
+
+    <select id="DELETE_BY_ID" parameterType="java.lang.String" resultType="java.lang.Integer">
+        delete from job_config where id = #{id}
+    </select>
+
+    <sql id="_sql_where">
+        <if test="id != null">
+            and id=#{id}
+        </if>
+        <if test="name != null and name != '' ">
+            and name=#{name}
+        </if>
+        <if test="app != null and app != '' ">
+            and app=#{app}
+        </if>
+        <if test="type != null">
+            and type=#{type}
+        </if>
+        <if test="triggerMode != null">
+            and trigger_mode=#{triggerMode}
+        </if>
+        <if test="jobBeanName != null and jobBeanName != '' ">
+            and job_bean_name=#{jobBeanName}
+        </if>
+        <if test="isActivity != null">
+            and activity=#{isActivity}
+        </if>
+        <if test="version != null">
+            and version=#{version}
+        </if>
+        <if test="gtId != null">
+            and id &gt; #{gtId}
+        </if>
+        <if test="egtLastModifyTimeLong != null">
+            and last_modify_time_long &gt;= #{egtLastModifyTimeLong}
+        </if>
+    </sql>
+
+    <insert id="INSERT" parameterType="JobConfig">
+        INSERT INTO job_config (<include refid="Base_Column_List"/>)
+        VALUES(
+        #{id},#{name},#{app},#{type},#{triggerMode},
+        #{cron},#{jobBeanName},#{clientIp},#{isActivity},#{description},
+        #{param},#{ownerPhone},#{version},#{lastModifyTimeLong},#{createTime},#{modifyTime}
+        )
+    </insert>
+
+    <update id="UPDATE_BY_ID" parameterType="JobConfig">
+        update
+        job_config
+        <set>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="type != null">
+                type=#{type},
+            </if>
+            <if test="triggerMode != null">
+                trigger_mode=#{triggerMode},
+            </if>
+            <if test="cron != null">
+                cron=#{cron},
+            </if>
+            <if test="jobBeanName != null">
+                job_bean_name=#{jobBeanName},
+            </if>
+            <if test="clientIp != null">
+                client_ip=#{clientIp},
+            </if>
+            <if test="isActivity != null">
+                activity=#{isActivity},
+            </if>
+            <if test="description != null">
+                description=#{description},
+            </if>
+            <if test="param != null">
+                param=#{param},
+            </if>
+            <if test="ownerPhone != null">
+                owner_phone=#{ownerPhone},
+            </if>
+            version=#{version}+1,
+            last_modify_time_long=#{lastModifyTimeLong},
+            modify_time=#{modifyTime},
+        </set>
+        where id = #{id} and version = #{version}
+    </update>
+
+    <sql id="_select_limit">
+        <if test="offset != null and limit != null">
+            limit #{offset} , #{limit}
+        </if>
+    </sql>
+
+    <sql id="_select_orderby">
+        <if test="orderBy != null">
+            ORDER BY ${orderBy.columnName} ${orderBy.type}
+        </if>
+    </sql>
+
+    <select id="QUERY" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        job_config
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <include refid="_sql_where"/>
+            </trim>
+        </where>
+        <include refid="_select_orderby"/>
+        <include refid="_select_limit"/>
+    </select>
+
+    <select id="COUNT" parameterType="map" resultType="int">
+        select
+        count(1)
+        from
+        job_config
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <include refid="_sql_where"/>
+            </trim>
+        </where>
+    </select>
+</mapper>

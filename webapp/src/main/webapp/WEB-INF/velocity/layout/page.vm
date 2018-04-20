@@ -1,0 +1,101 @@
+<div class="im-b-r clearfix">
+    <div class="paging ">
+
+        <div class="p-page" style='float:left;position:relative;margin-top:3px'>
+            <span class="gray">当前是第</span><span class="org">$!{query.pageNo}</span><span
+                class="gray">/$!{query.pageCount}页</span>
+            #if(${query.pageNo} > 1)
+                <a class="p-prev" href="javascript:submitForm(4);" id="lnkPrePage">上一页</a>
+            #else
+                <a class="p-prev-dis" href="javascript:;" id="lnkPrePage">上一页</a>
+            #end
+            #if(${query.startPage} > 1)
+                <span class="p-break">...</span>
+            #end
+            #if(${query.pageCount} > 1)
+                #foreach($curPageNo in [${query.startPage} .. ${query.endPage}])
+                    #if($curPageNo == ${query.pageNo})<a class="p-cur" href="javascript:;">$curPageNo</a>#else<a
+                            href="javascript:submitForm(7,$curPageNo);">$curPageNo</a>#end
+                #end
+            #end
+            #if(${query.endPage} < ${query.pageCount})
+                <span class="p-break">...</span>
+            #end
+            #if(${query.pageNo} < ${query.pageCount})
+                <a class="p-next" href="javascript:submitForm(5);" id="lnkNextPage">下一页</a>
+            #else
+                <a class="p-next-dis" href="javascript:;" id="lnkNextPage">下一页</a>
+            #end
+
+            &nbsp;&nbsp&nbsp;&nbsp;共$!{query.totalCount}条记录
+        </div>
+        <div style='float:left;position:relative;margin-top:-4px'>
+            &nbsp;&nbsp;&nbsp;转到第
+            <input type="text" id="txtPageNo" class="skipto" name="txtPageNo" style='width:60px'/>
+            页
+            <input id="skipsub" class="btn51x26" type="button" value="确定" onclick="submitForm(2);">
+        </div>
+    </div>
+</div>
+
+<script>
+
+    /**
+     * form 提交 （参数type 1：查询按钮  2：go按钮 3 首页： 4： 上一页  5：下一页 6：末页）默认查询按钮
+     */
+    function submitForm(type, pNo) {
+        var no = $("#pageNo").attr("value");
+        if (type == 1 || type == 3) {
+            $("#pageNo").attr("value", 1);
+        } else if (type == 2) {
+            var txtPageNo = $("#txtPageNo").val();
+            if (null == txtPageNo || '' == txtPageNo) {
+                $("#pageNo").attr("value", 1);
+                txtPageNo = no;
+            }
+            if (isNaN(txtPageNo)) {
+                alert("请输入数字");
+                $("#txtPageNo").attr("value", '');
+                return;
+            } else {
+                if (txtPageNo > ${query.pageCount}) {
+                    txtPageNo = ${query.pageCount}
+                } else {
+                    $("#pageNo").attr("value", txtPageNo);
+                }
+                if (txtPageNo < 1)
+                    $("#pageNo").attr("value", 1);
+            }
+        } else if (type == 4) {
+            no = parseInt(no) - 1;
+            if (no < 1) {
+                no = 1;
+            }
+            $("#pageNo").attr("value", no);
+        } else if (type == 5) {
+            no = parseInt(no) + 1;
+            if (no < 1) {
+                no = 1;
+            }
+            $("#pageNo").attr("value", no);
+            //alert($("#pageNo").attr("value"));
+        } else if (type == 6) {
+            var pageCount = $("#pageCount").attr("value");
+            $("#pageNo").attr("value", pageCount);
+        } else if (type == 7) {
+            $("#pageNo").attr("value", pNo);
+        }
+        var actionUrl = $("#searchForm").val();
+        if (actionUrl) {
+            $("#pagingForm").attr("action", actionUrl);
+        }
+
+        $("#pagingForm").submit();
+    }
+
+    function changePageSize() {
+        $("#pageNo").attr("value", 1);
+        $("#" + $("#pagingForm").val()).submit();
+    }
+
+</script>

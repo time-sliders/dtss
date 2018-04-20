@@ -1,0 +1,164 @@
+<div class="page-header">
+    <h1>
+        <small>添加新任务</small>
+    </h1>
+</div>
+
+<form id="form" class="form-horizontal" role="form" action="$ac.contextPath/job/add" method="post">
+    <fieldset>
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">任务名称:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="name" name="name" placeholder="必须填写"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="group" class="col-sm-2 control-label">所属APP:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="app" name="app" placeholder="必录,请填写所属应用名称,如trade"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="type" class="col-sm-2 control-label">任务类型:</label>
+            <div class="col-sm-4">
+                <select id="type" name="type" class="form-control">
+                    <option value="1" selected>
+                        分布式任务 &nbsp;&nbsp;&nbsp;&nbsp;>随机选择一个存活的机器执行
+                    </option>
+                    <option value="7">
+                        绝对单点任务 >只能在特定的单点执行,该单点死亡则执行失败
+                    </option>
+                    <option value="8">
+                        单点优先任务 >优先在指定的单点执行,该单点死亡则由其它存活机器执行
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="triggerMode" class="col-sm-2 control-label">触发模式:</label>
+            <div class="col-sm-4">
+                <select id="triggerMode" name="triggerMode" class="form-control">
+                    <option value="1" selected>
+                        自动触发
+                    </option>
+                    <option value="2">
+                        被动执行
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" id="cronDiv">
+            <label for="cron" class="col-sm-2 control-label">Cron表达式:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="cron" name="cron"
+                       placeholder="[{秒} {分} {时} {日} {月} {星期} {年(可空)}] /步进 *任意 -区间 ,指定"
+                       autocomplete="off"/>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="jobBeanName" class="col-sm-2 control-label">JobBeanName:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="jobBeanName" name="jobBeanName"
+                       placeholder="必录,首字母小写,不需要包路径." autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group" id="clientIpDiv">
+            <label for="clientIp" class="col-sm-2 control-label">客户端IP列表:</label>
+            <div class="col-sm-4">
+                    <textarea class="form-control col-sm-10" style="resize:none;" rows="3" id="clientIp" name="clientIp"
+                              autocomplete="off" placeholder="客户端IP列表，多个客户端以|分割">
+                    </textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="activity" class="col-sm-2 control-label">是否激活:</label>
+            <div class="col-sm-4">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="activity" name="activity" checked/>
+                        激活
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="param" class="col-sm-2 control-label">参数:</label>
+            <div class="col-sm-4">
+                <textarea class="form-control col-sm-10" style="resize:none;" rows="3" id="param" name="param"
+                          autocomplete="off" placeholder="最多 255 个字符"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description" class="col-sm-2 control-label">描述:</label>
+            <div class="col-sm-4">
+                <textarea class="form-control col-sm-10" style="resize:none;" rows="3" id="description" name="description"
+                          autocomplete="off" placeholder="最多 255 个字符"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ownerPhone" class="col-sm-2 control-label">负责人手机号:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="ownerPhone" name="ownerPhone" value="$!data.ownerPhone"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button id="submitBtn" type="submit" class="btn btn-danger">添加新任务</button>
+                <button id="backBtn" type="button" class="btn btn-primary">返回</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+#parse("/commons/alert.vm")
+#parse("/commons/jobcheck.vm")
+
+<script>
+
+    $(document).ready(function () {
+        $("#jobSpan").click();
+        $("#jobAdd").addClass("active");
+    });
+
+    $("#triggerMode").change(function () {
+        if ("2" == $(this).val()) {
+            $("#cronDiv").hide();
+            $("#cron").val("");
+        } else {
+            $("#cronDiv").show();
+        }
+    });
+    $("#triggerMode").change();
+
+    $("#type").change(function () {
+        if ("7" == $(this).val() || "8" == $(this).val()) {
+            $("#clientIpDiv").show();
+        } else {
+            $("#clientIpDiv").hide();
+            $("#clientIp").val("");
+        }
+    });
+    $("#type").change();
+
+    var liArray = $("#navBarUl li");
+    jQuery.each(liArray, function (i, n) {
+        $(n).removeClass("active");
+    });
+    $("#jobInfoAddLi").addClass("active");
+
+    $("form").submit(function () {
+        if (!checkFormParam()) {
+            return false;
+        }
+        $("#submitBtn").attr("disabled", "disabled");
+    });
+
+    $("#backBtn").click(function () {
+        history.go(-1);
+    });
+
+</script>

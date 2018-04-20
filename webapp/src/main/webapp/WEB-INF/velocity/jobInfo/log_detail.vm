@@ -1,0 +1,125 @@
+<div class="page-header">
+    <h1>
+        <small>任务执行记录详情</small>
+    </h1>
+</div>
+
+<form id="form" class="form-horizontal" role="form" method="post">
+    <fieldset>
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">所属应用:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" readonly="readonly" value="$!data.app" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="group" class="col-sm-2 control-label">任务名称:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" readonly="readonly" value="$!data.name" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="type" class="col-sm-2 control-label">BeanName:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" readonly="readonly" value="$!data.jobBeanName"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="triggerMode" class="col-sm-2 control-label">触发服务器:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" readonly="readonly" value="$!data.triggerServerIp"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group" id="cronDiv">
+            <label for="cron" class="col-sm-2 control-label">执行客户端:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" readonly="readonly" value="$!data.executeClientIp"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="jobBeanName" class="col-sm-2 control-label">执行状态:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" readonly="readonly" style="color: $!data.statusColor;"
+                       value="$!data.status" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group" id="clientIpDiv">
+            <label for="clientIp" class="col-sm-2 control-label">执行参数:</label>
+            <div class="col-sm-4">
+                <textarea class="form-control col-sm-10" readonly="readonly" style="resize:none;" rows="3"
+                          autocomplete="off">$!data.param</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="activity" class="col-sm-2 control-label">开始时间:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" readonly="readonly" value="$!data.startTime"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="param" class="col-sm-2 control-label">结束时间:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" readonly="readonly" value="$!data.finishTime"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description" class="col-sm-2 control-label">内部消息:</label>
+            <div class="col-sm-4">
+                <textarea class="form-control col-sm-10" readonly="readonly" style="resize:none;color: orange" rows="2"
+                          autocomplete="off">$!data.innerMsg</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description" class="col-sm-2 control-label">执行结果:</label>
+            <div class="col-sm-4">
+                <textarea class="form-control col-sm-10" readonly="readonly" style="resize:none;" rows="3"
+                          autocomplete="off">$!data.jobExeResult</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button id="refreshBtn" type="button" class="btn btn-primary">刷新状态</button>
+                <button id="stopBtn" type="button" class="btn btn-danger">中止任务</button>
+                <button id="backBtn" type="button" class="btn btn-primary">返回</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<form id="refreshForm" action="$ac.contextPath/job/logDetail">
+    <input type="hidden" id="id" name="id" value="$!data.id"/>
+</form>
+
+<form id="stopForm" action="$ac.contextPath/job/stopExe">
+    <input type="hidden" id="id" name="id" value="$!data.id"/>
+</form>
+
+<form id="stopForm" action="$ac.contextPath/job/stopExe" method="post">
+    <input type="hidden" id="id" name="id" value="$!data.id"/>
+</form>
+
+#parse("/commons/alert.vm")
+
+<script>
+    $(document).ready(function () {
+        $("#jobSpan").click();
+        $("#jobLog").addClass("active");
+    });
+
+    $("#refreshBtn").click(function () {
+        $("#refreshForm").submit();
+    });
+
+    $("#stopBtn").click(function () {
+        $("#stopForm").submit();
+    });
+
+    $("#backBtn").click(function () {
+        history.go(-1);
+    });
+</script>

@@ -1,0 +1,16 @@
+<div align="center">
+    －－－
+    #if($!{query.getPageNo()}==1)
+        已是第一页
+    #else
+        <a class="p-prev" href="javascript:submitForm(4);" id="lnkPrePage"> ［上一页］ </a>
+    #end
+    －－－
+    #if($!{query.isHasNextPage()})
+        <a class="p-next" href="javascript:submitForm(5);" id="lnkNextPage"> ［下一页］ </a>
+    #else
+        已最后一页
+    #end
+    －－－当前是第<span class="org"> ［$!{query.pageNo}］ </span>页
+    －－－共<span class="org"> ［$!{query.pageCount}］ </span>页－－－
+</div>

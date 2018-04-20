@@ -1,0 +1,78 @@
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="#">
+            <span class="menu-text"></span>
+        </a>
+
+        <div class="sidebar" id="sidebar">
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('sidebar', 'fixed')
+                } catch (e) {
+                }
+            </script>
+
+            <ul class="nav nav-list">
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-apple"></i>
+                        <span class="menu-text" id="jobSpan">JOB相关</span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li id="jobView">
+                            <a href="${ac.contextPath}/job/list">
+                                <i class="icon-leaf"></i>
+                                <span class="menu-text">查看任务</span>
+                            </a>
+                        </li>
+                        <li id="jobAdd">
+                            <a href="${ac.contextPath}/job/toadd">
+                                <i class="icon-leaf"></i>
+                                <span class="menu-text">新增任务</span>
+                            </a>
+                        </li>
+                        <li id="jobLog">
+                            <a href="${ac.contextPath}/job/queryJobLog">
+                                <i class="icon-leaf"></i>
+                                <span class="menu-text">任务执行情况</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-skype"></i>
+                        <span class="menu-text" id="systemSpan">系统相关</span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li id="versionmenu">
+                            <a href="${ac.contextPath}/version">
+                                <span class="menu-text">
+                                    更新记录
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="sidebar-collapse" id="sidebar-collapse">
+                <i class="icon-double-angle-left"></i>
+            </div>
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('sidebar', 'collapsed')
+                } catch (e) {
+                }
+            </script>
+        </div>
+    </div>
+</div>

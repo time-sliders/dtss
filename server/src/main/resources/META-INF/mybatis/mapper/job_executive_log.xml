@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="JobExecutiveLog">
+
+    <resultMap id="BaseResultMap" type="JobExecutiveLog">
+        <id column="id"  property="id"/>
+        <result column="job_id"  property="jobId"/>
+        <result column="app"  property="app"/>
+        <result column="schedule_time"  property="scheduleTime"/>
+        <result column="slice_index"  property="sliceIndex"/>
+        <result column="name"  property="name"/>
+        <result column="job_bean_name"  property="jobBeanName"/>
+        <result column="trigger_server_ip"  property="triggerServerIp"/>
+        <result column="execute_client_ip"  property="executeClientIp"/>
+        <result column="start_time"  property="startTime"/>
+        <result column="finish_time"  property="finishTime"/>
+        <result column="param"  property="param"/>
+        <result column="status"  property="status"/>
+        <result column="inner_msg"  property="innerMsg"/>
+        <result column="job_exe_result"  property="jobExeResult"/>
+        <result column="create_time"  property="createTime"/>
+        <result column="modify_time"  property="modifyTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,job_id,app,schedule_time,slice_index,name,
+        job_bean_name,trigger_server_ip,execute_client_ip,
+        start_time,finish_time,param,status,inner_msg,job_exe_result,
+        create_time,modify_time
+    </sql>
+
+    <sql id="Base_Value_List">
+        #{id},#{jobId},#{app},#{scheduleTime},#{sliceIndex},#{name},
+        #{jobBeanName},#{triggerServerIp},#{executeClientIp},
+        #{startTime},#{finishTime},#{param},#{status},#{innerMsg},#{jobExeResult},
+        #{createTime},#{modifyTime}
+    </sql>
+
+    <select id="FIND_BY_ID" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List" />
+        from
+            job_executive_log
+        where
+            id = #{id}
+    </select>
+
+    <delete id="DELETE_BY_ID" parameterType="java.lang.Long">
+        delete from job_executive_log where id = #{id}
+    </delete>
+
+
+    <sql id="_sql_where">
+        <if test="id != null">
+            and id=#{id}
+        </if>
+        <if test="ltId != null">
+            and id &lt; #{ltId}
+        </if>
+        <if test="jobId != null">
+            and job_id=#{jobId}
+        </if>
+        <if test="app != null and app != '' ">
+            and app=#{app}
+        </if>
+        <if test="scheduleTime != null">
+            and schedule_time=#{scheduleTime}
+        </if>
+        <if test="sliceIndex != null">
+            and slice_index=#{sliceIndex}
+        </if>
+        <if test="name != null and name != '' ">
+            and name=#{name}
+        </if>
+        <if test="eltCreateTime != null">
+            and create_time &lt;= #{eltCreateTime}
+        </if>
+        <if test="jobBeanName != null and jobBeanName != '' ">
+            and job_bean_name=#{jobBeanName}
+        </if>
+        <if test="status != null">
+            and status=#{status}
+        </if>
+        <if test="triggerServerIp != null and triggerServerIp != '' ">
+            and trigger_server_ip=#{triggerServerIp}
+        </if>
+        <if test="executeClientIp != null and executeClientIp != '' ">
+            and execute_client_ip=#{executeClientIp}
+        </if>
+    </sql>
+
+    <sql id="_update_where">
+        <if test="executeClientIp != null and executeClientIp != '' ">
+            execute_client_ip=#{executeClientIp},
+        </if>
+        <if test="status != null">
+            status=#{status},
+        </if>
+        <if test="finishTime != null">
+            finish_time=#{finishTime},
+        </if>
+        <if test="innerMsg != null and innerMsg != '' ">
+            inner_msg=#{innerMsg},
+        </if>
+        <if test="jobExeResult != null and jobExeResult != '' ">
+            job_exe_result=#{jobExeResult},
+        </if>
+        <if test="modifyTime != null">
+            modify_time=#{modifyTime}
+        </if>
+    </sql>
+
+    <insert id="INSERT" parameterType="JobExecutiveLog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO job_executive_log (<include refid="Base_Column_List" />)
+        VALUES (<include refid="Base_Value_List" />)
+    </insert>
+
+    <insert id="INSERT_HIS" parameterType="JobExecutiveLog">
+        INSERT INTO job_executive_log_his (<include refid="Base_Column_List" />)
+        VALUES (<include refid="Base_Value_List" />)
+    </insert>
+
+    <update id="UPDATE_BY_ID" parameterType="JobExecutiveLog">
+        update
+            job_executive_log
+        <set>
+            <include refid="_update_where"/>
+        </set>
+        where
+            id = #{id}
+    </update>
+
+    <sql id="_select_limit">
+        <if test="offset != null and limit != null">
+            limit #{offset} , #{limit}
+        </if>
+    </sql>
+
+    <sql id="_select_orderby">
+        <if test="orderBy != null">
+            ORDER BY ${orderBy.columnName} ${orderBy.type}
+        </if>
+    </sql>
+
+    <select id="QUERY" parameterType="map" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from
+            job_executive_log
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <include refid="_sql_where"/>
+            </trim>
+        </where>
+        <include refid="_select_orderby" />
+        <include refid="_select_limit" />
+    </select>
+
+    <select id="COUNT" parameterType="map" resultType="int">
+        select
+            count(*)
+        from
+            job_executive_log
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <include refid="_sql_where"/>
+            </trim>
+        </where>
+    </select>
+
+</mapper>

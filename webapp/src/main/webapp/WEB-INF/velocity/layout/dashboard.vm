@@ -1,0 +1,211 @@
+#set($headerMenu = 'dashboard')
+
+<style>
+    .versionspan {
+        display: inline-block;
+        width: 42px;
+        position: absolute;
+        left: -11px;
+        top: 5px;
+    }
+</style>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('breadcrumbs', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="${ac.contextPath}/dashboard">主面板</a>
+
+            <span class="divider">
+			<i class="icon-angle-right arrow-icon"></i>
+		</span>
+        </li>
+        <li class="active">主面板</li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header position-relative">
+        <h1>
+            <small>
+                <i class="icon-double-angle-right"></i>
+                主面板
+            </small>
+        </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="widget-box transparent">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="lighter">
+                        <i class="icon-star orange"></i>
+                        系统最近动态
+                    </h4>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main no-padding">
+                        <table class="table table-bordered table-striped" id="reconsumtable">
+                            <thead class="thin-border-bottom">
+                            <tr>
+                                <th>
+                                    <i class="icon-caret-right blue"></i>
+                                    操作人
+                                </th>
+
+                                <th>
+                                    <i class="icon-caret-right blue"></i>
+                                    操作时间
+                                </th>
+
+                                <th class="hidden-480">
+                                    <i class="icon-caret-right blue"></i>
+                                    操作对象
+                                </th>
+
+                                <th>
+                                    <i class="icon-caret-right blue"></i>
+                                    操作记录
+                                </th>
+
+                                <th class="hidden-480">
+                                    <i class="icon-caret-right blue"></i>
+                                    操作结果
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                                #foreach(${e} in $!{fivelogs})
+                                <tr>
+                                    <td>
+                                        <small>
+                                            <b class="green">$!{e.operator}</b>
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <small>
+                                            <b>$!showUtils.showDateTime($!{e.createTime})</b>
+                                        </small>
+                                    </td>
+                                    <td>
+							<span class="tooltip-success" data-rel="tooltip" data-placement="bottom"
+                                  title="$!{e.operand}">
+    							<small>
+    								<b>$!showUtils.getCutString($!{e.operand},20)</b>
+    							</small>
+							</span>
+                                    </td>
+                                    <td>
+                                        <small>
+                                            <b class="red">$!{e.record}</b>
+                                        </small>
+                                    </td>
+                                    <td>
+                                        #if($!{e.result}==0)
+                                            <span class="label label-success">成功</span>
+                                        #elseif($!{e.result}==1)
+                                            <span class="label label-warning">失败</span>
+                                        #end
+                                    </td>
+                                </tr>
+                                #end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var amountpie_placeholder = $('#amountpie_placeholder').css({'width': '90%', 'min-height': '210px'});
+    var accountpie_placeholder = $('#accountpie_placeholder').css({'width': '90%', 'min-height': '210px'});
+    var amountpiedata =  $!{amountpiedata};
+    var acountpiedata =  $!{acountpiedata};
+
+    function drawPieChart(placeholder, data, position) {
+        $.plot(placeholder, data, {
+            series: {
+                pie: {
+                    show: true,
+                    radius: 1,
+                    label: {
+                        show: true,
+                        radius: 2 / 3,
+                        threshold: 0.1,
+                        formatter: labelFormatter
+                    },
+                    startAngle: 2
+                }
+            },
+            legend: {
+                show: true,
+                position: position || "ne",
+                labelBoxBorderColor: null,
+                margin: [-30, 15]
+            },
+            grid: {
+                hoverable: true,
+                clickable: true
+            }
+        })
+    }
+
+    drawPieChart(amountpie_placeholder, amountpiedata);
+    drawPieChart(accountpie_placeholder, acountpiedata);
+
+    function labelFormatter(label, series) {
+        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+    }
+
+
+    $(document).ready(function () {
+        $("#btn-scroll-up").hide();
+        $('#reconsumtable').css({'width': '90%', 'min-height': '210px'});
+        var plottooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+        var previousPoint = null;
+        amountpie_placeholder.on('plothover', function (event, pos, item) {
+            if (item) {
+                if (previousPoint != item.seriesIndex) {
+                    previousPoint = item.seriesIndex;
+                    var tip = item.series.data[0][1];
+                    plottooltip.show().children(0).text(tip);
+                }
+                plottooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+            } else {
+                plottooltip.hide();
+                previousPoint = null;
+            }
+        });
+
+        accountpie_placeholder.on('plothover', function (event, pos, item) {
+            if (item) {
+                if (previousPoint != item.seriesIndex) {
+                    previousPoint = item.seriesIndex;
+                    var tip = item.series.data[0][1];
+                    plottooltip.show().children(0).text(tip);
+                }
+                plottooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+            } else {
+                plottooltip.hide();
+                previousPoint = null;
+            }
+        });
+    });
+</script>
+
+  

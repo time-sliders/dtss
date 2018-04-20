@@ -1,0 +1,45 @@
+<meta charset="utf-8"/>
+<title>铜板街 -- 分布式任务调度系统</title>
+<meta name="description" content="overview &amp; stats"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="${ac.contextPath}/static/css/bootstrap.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="${ac.contextPath}/static/css/font-awesome.min.css"/>
+<link rel="stylesheet" href="${ac.contextPath}/static/css/googlefoot.css?family=Open+Sans:400,300"/>
+
+<link rel="stylesheet" href="${ac.contextPath}/static/css/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="${ac.contextPath}/static/css/jquery.gritter.css"/>
+
+<link rel="stylesheet" href="${ac.contextPath}/static/css/ace.min.css"/>
+<link rel="stylesheet" href="${ac.contextPath}/static/css/ace-rtl.min.css"/>
+<link rel="stylesheet" href="${ac.contextPath}/static/css/ace-skins.min.css"/>
+
+<link rel="stylesheet" href="${ac.contextPath}/static/css/datepicker.css"/>
+<link rel="stylesheet" href="${ac.contextPath}/static/css/bootstrap-timepicker.css"/>
+<link rel="stylesheet" href="${ac.contextPath}/static/css/daterangepicker.css"/>
+
+
+<link type="image/x-icon" href="${ac.contextPath}/static/images/favicon.ico" rel="shortcut icon">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<script src="${ac.contextPath}/static/js/jquery-2.0.3.min.js"></script>
+<script src="${ac.contextPath}/static/js/ace-extra.min.js"></script>
+<script src="${ac.contextPath}/static/js/bootstrap.min.js"></script>
+
+<script src="${ac.contextPath}/static/js/typeahead-bs2.min.js"></script>
+<script src="${ac.contextPath}/static/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="${ac.contextPath}/static/js/jquery.slimscroll.min.js"></script>
+<script src="${ac.contextPath}/static/js/jquery.easy-pie-chart.min.js"></script>
+<script src="${ac.contextPath}/static/js/jquery.sparkline.min.js"></script>
+<script src="${ac.contextPath}/static/js/flot/jquery.flot.min.js"></script>
+<script src="${ac.contextPath}/static/js/flot/jquery.flot.pie.min.js"></script>
+<script src="${ac.contextPath}/static/js/flot/jquery.flot.resize.min.js"></script>
+<script src="${ac.contextPath}/static/js/ace-elements.min.js"></script>
+<script src="${ac.contextPath}/static/js/ace.min.js"></script>
+<script src="${ac.contextPath}/static/js/jquery.gritter.min.js"></script>
+
+<script src="${ac.contextPath}/static/js/date-time/bootstrap-datepicker.min.js"></script>
+<script src="${ac.contextPath}/static/js/date-time/bootstrap-timepicker.min.js"></script>
+<script src="${ac.contextPath}/static/js/date-time/moment.min.js"></script>
+<script src="${ac.contextPath}/static/js/date-time/daterangepicker.min.js"></script>
+<script src="${ac.contextPath}/static/js/bootbox.min.js"></script>
+<script src="${ac.contextPath}/static/js/btc-index.js"></script>

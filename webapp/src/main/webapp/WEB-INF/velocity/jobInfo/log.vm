@@ -1,0 +1,114 @@
+<div class="page-header">
+    <h1>
+        <small>任务执行日志(只显示最近一个月数据)</small>
+    </h1>
+</div>
+
+<div class="page-content">
+    <div class="row-fluid">
+        <form class="form-horizontal" id="searchForm" method="post" action="$ac.contextPath/job/queryJobLog"
+              style="margin-bottom: 16px;margin-top: 8px;">
+            <input type="hidden" id="pageNo" name="pageNo" value="$!{query.pageNo}"/>
+            <input type="hidden" id="pageSize" name="pageSize" value="$!{query.pageSize}"/>
+            <input type="hidden" id="pageCount" name="pageCount" value="$!{query.pageCount}"/>
+            <table class="table table-striped table-bordered table-hover table-condensed">
+                <tr>
+                    <td style="text-align:right">所属APP</td>
+                    <td>
+                        <input id="app" type="text" placeholder="所属APP" name="app" value="$!{ao.app}">
+                    </td>
+                    <td style="text-align:right">JobBeanName:</td>
+                    <td>
+                        <input id="jobBeanName" type="text" placeholder="Bean名称,类名,首字母小写" name="jobBeanName"
+                               value="$!{ao.jobBeanName}">
+                    </td>
+                    <td style="text-align:right">任务名称</td>
+                    <td>
+                        <input id="name" type="text" placeholder="JOB名称" name="name" value="$!{ao.name}">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" align="center">
+                        <button type="submit" class="btn btn-xs btn-success" style="width: 150px;height: 30px" onclick="query(1)">查&nbsp;&nbsp;询</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <table class="table table-striped table-bordered table-hover table-condensed">
+            <thead>
+            <tr style="text-align:center">
+                <th style="text-align:center;width: 300px">
+                    任务名称
+                </th>
+                <th style="text-align:center;width: 150px">
+                    所属应用
+                </th>
+                <th style="text-align:center;width: 150px">
+                    触发服务器
+                </th>
+                <th style="text-align:center;width: 150px">
+                    执行客户端
+                </th>
+                <th style="text-align:center;width: 150px">
+                    开始时间
+                </th>
+                <th style="text-align:center;width: 100px">
+                    执行状态
+                </th>
+                <th style="text-align:center;width: 150px">
+                    执行耗时
+                </th>
+                <td style="text-align:center">
+                    /
+                </td>
+            </tr>
+            </thead>
+            #foreach($e in $data )
+                <tr>
+                    <td style="text-align:center">
+                        $!e.name
+                    </td>
+                    <td style="text-align:center">
+                        $!e.app
+                    </td>
+                    <td style="text-align:center">
+                        $!e.triggerServerIp
+                    </td>
+                    <td style="text-align:center">
+                        $!e.executeClientIp
+                    </td>
+                    <td style="text-align:center">
+                        $!e.startTime
+                    </td>
+                    <td style="text-align:center;color:$!e.statusColor">
+                        $!e.statusDesc
+                    </td>
+                    <td style="text-align:center">
+                        $!e.cost
+                    </td>
+                    <td style="text-align:center">
+                        <a href="$ac.contextPath/job/logDetail?id=${e.id}">
+                            <button id="viewBtn" type="button" class="btn btn-xs btn-success">
+                                查看详情
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            #end
+        </table>
+    </div>
+    #parse("/commons/pageline.vm")
+
+</div>
+
+#parse("/commons/confirm.vm")
+#parse("/commons/page.vm")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#jobSpan").click();
+        $("#jobLog").addClass("active");
+    });
+</script>
+

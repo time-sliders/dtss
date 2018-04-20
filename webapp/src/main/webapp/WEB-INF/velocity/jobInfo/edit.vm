@@ -1,0 +1,180 @@
+<div class="page-header">
+    <h1>
+        <small>编辑任务</small>
+    </h1>
+</div>
+
+<form id="form" class="form-horizontal" role="form" action="$ac.contextPath/job/edit" method="post">
+    <fieldset>
+        <input type="hidden" id="id" name="id" value="$!data.id"/>
+        <input type="hidden" id="version" name="version" value="$!data.version"/>
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">任务名称:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="name" name="name" value="$!data.name" placeholder="必须填写"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="group" class="col-sm-2 control-label">所属APP:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="app" name="app" value="$!data.app" placeholder="必录,请填写所属应用名称,如trade"
+                       autocomplete="off" readonly/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="type" class="col-sm-2 control-label">任务类型:</label>
+            <div class="col-sm-4">
+                <select id="type" name="type" class="form-control">
+                    <option value="1" #if("$data.type" == "1") selected #end>
+                        分布式任务
+                    </option>
+                    <option value="7" #if("$data.type" == "7") selected #end>
+                        绝对单点任务
+                    </option>
+                    <option value="8" #if("$data.type" == "8") selected #end>
+                        单点优先任务
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="triggerMode" class="col-sm-2 control-label">触发模式:</label>
+            <div class="col-sm-4">
+                <select id="triggerMode" name="triggerMode" class="form-control">
+                    <option value="1" #if("$data.triggerMode" == "1") selected #end>
+                        自动触发
+                    </option>
+                    <option value="2" #if("$data.triggerMode" == "2") selected #end>
+                        被动执行
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div id="cronDiv" class="form-group" style="display:none">
+            <label for="cron" class="col-sm-2 control-label">Cron表达式:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="cron" name="cron" value="$!data.cron"
+                       placeholder="[{秒} {分} {时} {日} {月} {星期} {年(可空)}] /步进 *任意 -区间 ,指定"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="jobBeanName" class="col-sm-2 control-label">JobBeanName:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="jobBeanName" name="jobBeanName" value="$!data.jobBeanName"
+                       placeholder="必录,首字母小写,不需要包路径." autocomplete="off"/>
+            </div>
+        </div>
+        <div id="clientIpDiv" class="form-group">
+            <label for="clientIp" class="col-sm-2 control-label">客户端IP列表:</label>
+            <div class="col-sm-4">
+                <textarea class="form-control col-sm-10" style="resize:none;" rows="3" id="clientIp" name="clientIp"
+                          autocomplete="off" placeholder="客户端IP列表，多个客户端以|分割">$!data.clientIp</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="activity" class="col-sm-2 control-label">是否激活:</label>
+            <div class="col-sm-4">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="activity" name="activity"
+                            #if($!data.isActivity())
+                               checked
+                            #end
+                        />
+                        激活
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="param" class="col-sm-2 control-label">参数:</label>
+            <div class="col-sm-4">
+                <textarea class="form-control col-sm-10" style="resize:none;" rows="3" id="param" name="param"
+                          autocomplete="off" placeholder="最多 255 个字符">$!data.param</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description" class="col-sm-2 control-label">描述:</label>
+            <div class="col-sm-4">
+                <textarea class="form-control col-sm-10" style="resize:none;" rows="3" id="description" name="description"
+                          autocomplete="off" placeholder="最多 255 个字符">$!data.description</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ownerPhone" class="col-sm-2 control-label">负责人手机号:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="ownerPhone" name="ownerPhone" value="$!data.ownerPhone"
+                       autocomplete="off"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button id="submitBtn" type="submit" class="btn btn-primary">保存任务</button>
+                <button id="executeBtn" type="submit" class="btn btn-danger">保存并执行任务</button>
+                <button id="testBtn" type="button" class="btn btn-primary">保存并测试任务</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+#parse("/commons/alert.vm")
+#parse("/commons/jobcheck.vm")
+
+<script>
+
+    $(document).ready(function () {
+        $("#jobSpan").click();
+        $("#jobView").addClass("active");
+    });
+
+    $("#triggerMode").change(function () {
+        if ("2" == $(this).val()) {
+            $("#cronDiv").hide();
+            $("#cron").val("");
+        } else {
+            $("#cronDiv").show();
+        }
+    });
+    $("#triggerMode").change();
+
+    $("#type").change(function () {
+        if ("7" == $(this).val() || "8" == $(this).val()) {
+            $("#clientIpDiv").show();
+        } else {
+            $("#clientIpDiv").hide();
+            $("#clientIp").val("");
+        }
+    });
+    $("#type").change();
+
+    $("#submitBtn").click(function () {
+        if (!checkFormParam()) {
+            return false;
+        }
+
+        $(this).attr("disabled", "disabled");
+        $("#form").attr("action", "$ac.contextPath/job/edit");
+        $("#form").submit();
+    });
+
+    $("#executeBtn").click(function () {
+        if (!checkFormParam()) {
+            return false;
+        }
+        $(this).attr("disabled", "disabled");
+        $("#form").attr("action", "$ac.contextPath/job/editAndExe");
+        $("#form").submit();
+    });
+
+    $("#testBtn").click(function () {
+        if (!checkFormParam()) {
+            return false;
+        }
+        $(this).attr("disabled", "disabled");
+        $("#form").attr("action", "$ac.contextPath/job/editAndTest");
+        $("#form").submit();
+    });
+
+</script>

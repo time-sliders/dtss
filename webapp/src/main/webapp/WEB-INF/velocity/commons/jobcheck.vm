@@ -1,0 +1,41 @@
+<script type="text/javascript">
+    function checkFormParam() {
+        var name = $("#name").val();
+        if (name == "") {
+            showError("任务名称必须填写");
+            return false;
+        }
+
+        var app = $("#app").val();
+        if (app == "") {
+            showError("应用App必须填写");
+            return false;
+        }
+
+        var type = $("#type").val();
+        if ("7" == type || "8" == type) {
+            var clientIp = $("#clientIp").val()
+            if (clientIp == "") {
+                showError("配置单点任务时，必须指定客户端IP列表");
+                return false;
+            }
+        }
+
+        var triggerMode = $("#triggerMode").val();
+        if (triggerMode == 1) {
+            var cron = $("#cron").val();
+            if (cron == "") {
+                showError("自动触发任务时，cron表达式必须填写");
+                return false;
+            }
+        }
+
+        var jobBeanName = $("#jobBeanName").val()
+        if (jobBeanName == "") {
+            showError("任务类Bean名称必须填写");
+            return false;
+        }
+
+        return true;
+    }
+</script>
