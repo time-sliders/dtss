@@ -96,7 +96,7 @@ public class ClientSystemNodeWatcher implements Watcher, ZookeeperPathConst, Zoo
         }
 
         for (String app : children) {
-            if (systemInfoMap.get(app) != null) {
+            if (systemInfoMap.containsKey(app)) {
                 continue;
             }
 

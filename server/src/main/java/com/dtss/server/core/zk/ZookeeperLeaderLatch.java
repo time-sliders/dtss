@@ -65,8 +65,6 @@ public class ZookeeperLeaderLatch extends AsyncTryRunAsMaster<String> implements
     protected void loseCallBack() {
         if (hasLeaderShip.compareAndSet(true, false)) {
             logger.info("DTSS>[" + LOCAL_IP + "]失去了Leader权限");
-        } else {
-            logger.info("DTSS>[" + LOCAL_IP + "]非Cluster Leader");
         }
     }
 }
