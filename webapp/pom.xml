@@ -17,7 +17,12 @@
 			<artifactId>dtss-server</artifactId>
 			<version>1.0</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+        </dependency>
+    </dependencies>
 	
 	<build>
 		<finalName>dtss</finalName>

@@ -3,7 +3,6 @@ CREATE DATABASE IF NOT EXISTS dtss
   COLLATE utf8_general_ci;
 
 USE dtss;
-DROP TABLE dtss.job_config;
 CREATE TABLE dtss.job_config (
   `id`                  VARCHAR(32)      NOT NULL,
   `name`                VARCHAR(64)      DEFAULT NULL
@@ -45,7 +44,6 @@ CREATE TABLE dtss.job_config (
   DEFAULT CHARSET = utf8
   COMMENT = 'JOB配置表';
 
-DROP TABLE dtss.job_executive_log;
 CREATE TABLE dtss.job_executive_log (
   `id`                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `job_id`            VARCHAR(32)     NOT NULL
@@ -87,7 +85,6 @@ CREATE TABLE dtss.job_executive_log (
   DEFAULT CHARSET = utf8
   COMMENT = 'JOB执行记录表';
 
-DROP TABLE dtss.job_executive_log_his;
 CREATE TABLE dtss.job_executive_log_his (
   `id`                BIGINT UNSIGNED NOT NULL,
   `job_id`            VARCHAR(32)     NOT NULL

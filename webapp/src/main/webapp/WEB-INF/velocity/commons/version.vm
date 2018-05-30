@@ -45,7 +45,7 @@
                     </a>
                 </div>
             </div>
-            <div class="widget-body">
+            #*<div class="widget-body">
                 <div class="widget-main no-padding">
                     <div class="dialogs">
                         <div class="itemdiv dialogdiv">
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*#
         </div>
     </div>
 </div>

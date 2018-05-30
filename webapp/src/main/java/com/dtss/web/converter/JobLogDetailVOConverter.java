@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @since 2018.03.23
  */
 @Component
-public class JobLogDetailVOConverter extends AbstractObjectConverter<JobExecutiveLog,JobLogDetailVO> {
+public class JobLogDetailVOConverter extends AbstractObjectConverter<JobExecutiveLog, JobLogDetailVO> {
 
     @Override
     protected JobLogDetailVO onBuildDto(JobExecutiveLog model) {
@@ -24,8 +24,10 @@ public class JobLogDetailVOConverter extends AbstractObjectConverter<JobExecutiv
         vo.setTriggerServerIp(model.getTriggerServerIp());
         vo.setExecuteClientIp(model.getExecuteClientIp());
         vo.setJobBeanName(model.getJobBeanName());
-        vo.setFinishTime(DateUtil.format(model.getFinishTime(),DateUtil.DEFAULT_FORMAT));
-        vo.setStartTime(DateUtil.format(model.getStartTime(),DateUtil.DEFAULT_FORMAT));
+        if (model.getFinishTime() != null) {
+            vo.setFinishTime(DateUtil.format(model.getFinishTime(), DateUtil.DEFAULT_FORMAT));
+        }
+        vo.setStartTime(DateUtil.format(model.getStartTime(), DateUtil.DEFAULT_FORMAT));
         vo.setInnerMsg(model.getInnerMsg());
         vo.setJobExeResult(model.getJobExeResult());
         vo.setJobId(model.getJobId());
