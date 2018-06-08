@@ -18,7 +18,8 @@
         <div class="form-group">
             <label for="group" class="col-sm-2 control-label">所属APP:</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="app" name="app" value="$!data.app" placeholder="必录,请填写所属应用名称,如trade"
+                <input type="text" class="form-control" id="app" name="app" value="$!data.app"
+                       placeholder="必录,请填写所属应用名称,如trade"
                        autocomplete="off" readonly/>
             </div>
         </div>
@@ -78,12 +79,13 @@
             <div class="col-sm-4">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" id="activity" name="activity"
-                            #if($!data.isActivity())
-                               checked
-                            #end
-                        />
-                        激活
+                        <label class="pull-left inline">
+                            <input id="activity" name="activity" type="checkbox" class="ace ace-switch ace-switch-5"
+                                #if($!data.isActivity())
+                                   checked="checked"
+                                #end/>
+                            <span class="lbl middle"></span>
+                        </label>
                     </label>
                 </div>
             </div>
@@ -98,7 +100,8 @@
         <div class="form-group">
             <label for="description" class="col-sm-2 control-label">描述:</label>
             <div class="col-sm-4">
-                <textarea class="form-control col-sm-10" style="resize:none;" rows="3" id="description" name="description"
+                <textarea class="form-control col-sm-10" style="resize:none;" rows="3" id="description"
+                          name="description"
                           autocomplete="off" placeholder="最多 255 个字符">$!data.description</textarea>
             </div>
         </div>

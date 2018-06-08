@@ -48,7 +48,9 @@
                 </tr>
                 <tr>
                     <td colspan="6" align="center">
-                        <button type="submit" class="btn btn-xs btn-success" style="width: 150px;height: 30px" onclick="query(1)">查询</button>
+                        <button type="submit" class="btn btn-xs btn-success" style="width: 150px;height: 30px" onclick="query(1)">
+                            <i class="ace-icon glyphicon glyphicon-search"></i>&nbsp;&nbsp;Search
+                        </button>
                     </td>
                 </tr>
             </table>
@@ -114,22 +116,25 @@
                     </td>
                     <td style="text-align:center">
                         <a href="$ac.contextPath/job/view?id=${e.id}">
-                            <button id="viewBtn" type="button" class="btn btn-xs btn-success">
-                                查看
+                            <button class="btn btn-white btn-default btn-round">
+                                <i class="ace-icon fa fa-eye bigger-130 red2"></i>&nbsp;
+                                VIEW
                             </button>
                         </a>
                     </td>
                     <td>
                         <a href="$ac.contextPath/job/toedit?id=${e.id}">
-                            <button type="button" class="btn btn-xs btn-warning">
-                                编辑
+                            <button type="button" class="btn btn-white btn-info btn-bold">
+                                <i class="ace-icon fa fa-pencil-square-o bigger-130 blue"></i>&nbsp;
+                                EDIT
                             </button>
                         </a>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-xs btn-danger" value="$e.id"
+                        <button type="button" class="btn btn-white btn-warning btn-bold" value="$e.id"
                                 onclick="confirmDelete('$e.id','确定要删除任务 $!{e.name} 吗?')">
-                            删除
+                            <i class="ace-icon fa fa-trash-o bigger-130 orange"></i> &nbsp;
+                            DELETE
                         </button>
                     </td>
                 </tr>

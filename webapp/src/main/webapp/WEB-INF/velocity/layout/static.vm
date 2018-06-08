@@ -3,8 +3,8 @@
 <meta name="description" content="overview &amp; stats"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link href="${ac.contextPath}/static/css/bootstrap.min.css" rel="stylesheet"/>
-<link rel="stylesheet" href="${ac.contextPath}/static/css/font-awesome.min.css"/>
-<link rel="stylesheet" href="${ac.contextPath}/static/css/googlefoot.css?family=Open+Sans:400,300"/>
+<link rel="stylesheet" href="${ac.contextPath}/static/font-awesome/4.5.0/css/font-awesome.min.css"/>
+<link rel="stylesheet" href="${ac.contextPath}/static/css/fonts.googleapis.com.css" />
 
 <link rel="stylesheet" href="${ac.contextPath}/static/css/jquery-ui-1.10.3.custom.min.css"/>
 <link rel="stylesheet" href="${ac.contextPath}/static/css/jquery.gritter.css"/>
@@ -42,4 +42,3 @@
 <script src="${ac.contextPath}/static/js/date-time/moment.min.js"></script>
 <script src="${ac.contextPath}/static/js/date-time/daterangepicker.min.js"></script>
 <script src="${ac.contextPath}/static/js/bootbox.min.js"></script>
-<script src="${ac.contextPath}/static/js/btc-index.js"></script>
