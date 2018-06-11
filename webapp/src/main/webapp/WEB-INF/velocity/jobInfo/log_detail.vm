@@ -1,9 +1,13 @@
-<div class="page-header">
-    <h1>
-        <small>任务执行记录详情</small>
-    </h1>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="#">JOB 相关</a>
+        </li>
+        <li class="active">任务执行记录详情</li>
+    </ul>
 </div>
-
+<br/>
 <form id="form" class="form-horizontal" role="form" method="post">
     <fieldset>
         <div class="form-group">
@@ -83,9 +87,18 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button id="refreshBtn" type="button" class="btn btn-primary">刷新状态</button>
-                <button id="stopBtn" type="button" class="btn btn-danger">中止任务</button>
-                <button id="backBtn" type="button" class="btn btn-primary">返回</button>
+                <button id="backBtn" type="button" class="btn btn-white btn-info btn-bold">
+                    <i class="ace-icon glyphicon glyphicon-backward bigger-120 blue"></i>&nbsp;
+                    BACK
+                </button>
+                <button id="refreshBtn" type="button" class="btn btn-success">
+                    <i class="ace-icon glyphicon glyphicon-refresh bigger-140"></i>&nbsp;
+                    Refresh
+                </button>
+                <button id="stopBtn" type="button" class="btn btn-danger">
+                    <i class="ace-icon glyphicon glyphicon-off bigger-140"></i>&nbsp;
+                    Stop
+                </button>
             </div>
         </div>
     </fieldset>
@@ -120,6 +133,6 @@
     });
 
     $("#backBtn").click(function () {
-        history.go(-1);
+        window.location.href = "$ac.contextPath/job/queryJobLog";
     });
 </script>

@@ -1,78 +1,99 @@
-<div class="main-container" id="main-container">
+<div class="main-container ace-save-state" id="main-container">
     <script type="text/javascript">
         try {
-            ace.settings.check('main-container', 'fixed')
+            ace.settings.loadState('main-container')
         } catch (e) {
         }
     </script>
-    <div class="main-container-inner">
-        <a class="menu-toggler" id="menu-toggler" href="#">
-            <span class="menu-text"></span>
-        </a>
 
-        <div class="sidebar" id="sidebar">
-            <script type="text/javascript">
-                try {
-                    ace.settings.check('sidebar', 'fixed')
-                } catch (e) {
-                }
-            </script>
+    <div id="sidebar" class="sidebar responsive ace-save-state sidebar-fixed sidebar-scroll">
+        <script type="text/javascript">
+            try {
+                ace.settings.loadState('sidebar')
+            } catch (e) {
+            }
+        </script>
 
-            <ul class="nav nav-list">
-                <li>
-                    <a href="#" class="dropdown-toggle">
-                        <i class="icon-apple"></i>
-                        <span class="menu-text" id="jobSpan">JOB相关</span>
-                        <b class="arrow icon-angle-down"></b>
-                    </a>
-                    <ul class="submenu">
-                        <li id="jobView">
-                            <a href="${ac.contextPath}/job/list">
-                                <i class="icon-leaf"></i>
-                                <span class="menu-text">查看任务</span>
-                            </a>
-                        </li>
-                        <li id="jobAdd">
-                            <a href="${ac.contextPath}/job/toadd">
-                                <i class="icon-leaf"></i>
-                                <span class="menu-text">新增任务</span>
-                            </a>
-                        </li>
-                        <li id="jobLog">
-                            <a href="${ac.contextPath}/job/queryJobLog">
-                                <i class="icon-leaf"></i>
-                                <span class="menu-text">任务执行情况</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="dropdown-toggle">
-                        <i class="icon-skype"></i>
-                        <span class="menu-text" id="systemSpan">系统相关</span>
-                        <b class="arrow icon-angle-down"></b>
-                    </a>
-                    <ul class="submenu">
-                        <li id="versionmenu">
-                            <a href="${ac.contextPath}/version">
-                                <span class="menu-text">
-                                    更新记录
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+        <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+            <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+                <button class="btn btn-success">
+                    <i class="ace-icon fa fa-signal"></i>
+                </button>
 
-            <div class="sidebar-collapse" id="sidebar-collapse">
-                <i class="icon-double-angle-left"></i>
+                <button class="btn btn-info">
+                    <i class="ace-icon fa fa-pencil"></i>
+                </button>
+
+                <button class="btn btn-warning">
+                    <i class="ace-icon fa fa-users"></i>
+                </button>
+
+                <button class="btn btn-danger">
+                    <i class="ace-icon fa fa-cogs"></i>
+                </button>
             </div>
-            <script type="text/javascript">
-                try {
-                    ace.settings.check('sidebar', 'collapsed')
-                } catch (e) {
-                }
-            </script>
+
+            <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+                <span class="btn btn-success"></span>
+
+                <span class="btn btn-info"></span>
+
+                <span class="btn btn-warning"></span>
+
+                <span class="btn btn-danger"></span>
+            </div>
+        </div>
+
+        <ul class="nav nav-list">
+            <li>
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon glyphicon glyphicon-cloud"></i>
+                    <span class="menu-text" id="jobSpan">JOB相关</span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <ul class="submenu">
+                    <li id="jobView">
+                        <a href="${ac.contextPath}/job/list">
+                            <i class="menu-icon fa fa-eye"></i>
+                            <span class="menu-text">查看任务</span>
+                        </a>
+                    </li>
+                    <li id="jobAdd">
+                        <a href="${ac.contextPath}/job/toadd">
+                            <i class="menu-icon fa fa-save"></i>
+                            <span class="menu-text">新增任务</span>
+                        </a>
+                    </li>
+                    <li id="jobLog">
+                        <a href="${ac.contextPath}/job/queryJobLog">
+                            <i class="menu-icon fa fa-list"></i>
+                            <span class="menu-text">任务执行情况</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon glyphicon glyphicon-flag"></i>
+                    <span class="menu-text" id="systemSpan">系统相关</span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <ul class="submenu">
+                    <li id="versionmenu">
+                        <a href="${ac.contextPath}/version">
+                            <i class="menu-icon fa fa-bookmark-o"></i>
+                            <span class="menu-text">
+                                更新记录
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="sidebar-collapse" id="sidebar-collapse">
+            <i class="icon-double-angle-left"></i>
         </div>
     </div>
 </div>
+

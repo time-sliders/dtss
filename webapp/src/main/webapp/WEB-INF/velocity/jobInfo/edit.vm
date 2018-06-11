@@ -1,9 +1,13 @@
-<div class="page-header">
-    <h1>
-        <small>编辑任务</small>
-    </h1>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="#">JOB 相关</a>
+        </li>
+        <li class="active">编辑任务</li>
+    </ul>
 </div>
-
+<br/>
 <form id="form" class="form-horizontal" role="form" action="$ac.contextPath/job/edit" method="post">
     <fieldset>
         <input type="hidden" id="id" name="id" value="$!data.id"/>
@@ -114,9 +118,20 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button id="submitBtn" type="submit" class="btn btn-primary">保存任务</button>
-                <button id="executeBtn" type="submit" class="btn btn-danger">保存并执行任务</button>
-                <button id="testBtn" type="button" class="btn btn-primary">保存并测试任务</button>
+                <button id="submitBtn" type="button" class="btn btn-success">
+                    <i class="ace-icon fa fa-save bigger-140"></i>&nbsp;
+                    SAVE
+                </button>
+                <button id="executeBtn" type="button" class="btn btn-danger">
+                    <i class="ace-icon fa fa-save bigger-140"></i>&nbsp;&nbsp;
+                    <i class="ace-icon fa fa-fighter-jet bigger-140"></i>&nbsp;&nbsp;
+                    SAVE & EXECUTE
+                </button>
+                <button id="testBtn" type="button" class="btn btn-info">
+                    <i class="ace-icon fa fa-save bigger-140"></i>&nbsp;&nbsp;
+                    <i class="ace-icon fa fa-fire bigger-140"></i>&nbsp;&nbsp;
+                    SAVE & TEST
+                </button>
             </div>
         </div>
     </fieldset>

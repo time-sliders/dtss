@@ -4,17 +4,20 @@
 <head>
     #parse("/layout/static.vm")
 </head>
-<body>
+
+<body class="skin-1">
+
     #parse("/layout/header.vm")
     #parse("/layout/leftmenu.vm")
-<div class="main-content">
-    <div id="screnncontent">
-        $screen_content
-    </div>
+
+<div class="main-content" id="screnncontent" style="margin-top:45px">
+    $screen_content
 </div>
+
 <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
     <i class="icon-double-angle-up icon-only bigger-110"></i>
 </a>
+
     #parse("/layout/bottom.vm")
 
 <div id="show-message-container"></div>
@@ -28,26 +31,10 @@
             $(this).prev().focus();
         });
 
-        if ('' != errormsg){
+        if ('' != errormsg) {
             btcMessage("错误消息", errormsg);
         }
     });
-
-    function messageRecived(msg) {
-        #if($!request.getAttribute("aliasPinyin"))
-        #end
-
-        #set($SHOW_MESSAGE = $!request.getAttribute("SHOW_MESSAGE"))
-
-        #if($SHOW_MESSAGE)
-            #if($SHOW_MESSAGE == 1)
-                btcMessage("后台消息", msg);
-            #end
-        #else
-            btcMessage("后台消息", msg);
-        #end
-    }
-
 </script>
 
 </body>

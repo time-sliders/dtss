@@ -17,7 +17,6 @@
 <link rel="stylesheet" href="${ac.contextPath}/static/css/bootstrap-timepicker.css"/>
 <link rel="stylesheet" href="${ac.contextPath}/static/css/daterangepicker.css"/>
 
-
 <link type="image/x-icon" href="${ac.contextPath}/static/images/favicon.ico" rel="shortcut icon">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 

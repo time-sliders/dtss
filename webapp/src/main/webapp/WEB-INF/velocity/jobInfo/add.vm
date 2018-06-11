@@ -1,9 +1,13 @@
-<div class="page-header">
-    <h1>
-        <small>添加新任务</small>
-    </h1>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="#">JOB 相关</a>
+        </li>
+        <li class="active">添加任务</li>
+    </ul>
 </div>
-
+<br/>
 <form id="form" class="form-horizontal" role="form" action="$ac.contextPath/job/add" method="post">
     <fieldset>
         <div class="form-group">
@@ -78,8 +82,10 @@
             <div class="col-sm-4">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" id="activity" name="activity" checked/>
-                        激活
+                        <label class="pull-left inline">
+                            <input id="activity" name="activity" type="checkbox" class="ace ace-switch ace-switch-5" checked>
+                            <span class="lbl middle"></span>
+                        </label>
                     </label>
                 </div>
             </div>
@@ -107,8 +113,14 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button id="submitBtn" type="submit" class="btn btn-danger">添加新任务</button>
-                <button id="backBtn" type="button" class="btn btn-primary">返回</button>
+                <button id="submitBtn" type="submit" class="btn btn-success">
+                    <i class="ace-icon fa fa-save bigger-140"></i>&nbsp;
+                    SAVE
+                </button>
+                <button id="backBtn" type="button" class="btn btn-white btn-info btn-bold">
+                    <i class="ace-icon glyphicon glyphicon-backward bigger-120 blue"></i>&nbsp;
+                    BACK
+                </button>
             </div>
         </div>
     </fieldset>
@@ -158,7 +170,7 @@
     });
 
     $("#backBtn").click(function () {
-        history.go(-1);
+        window.location.href = "$ac.contextPath/job/list";
     });
 
 </script>

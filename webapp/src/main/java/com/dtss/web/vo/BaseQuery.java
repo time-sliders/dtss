@@ -6,7 +6,7 @@ package com.dtss.web.vo;
  */
 public class BaseQuery {
 
-    private static final int DEFAULT_PAGE_SIZE = 20;
+    private static final int DEFAULT_PAGE_SIZE = 10;
 
     private int pageSize = DEFAULT_PAGE_SIZE;
     private int pageNo = 1;

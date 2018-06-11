@@ -1,8 +1,13 @@
-<div class="page-header">
-    <h1>
-        <small>任务详情</small>
-    </h1>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="#">JOB 相关</a>
+        </li>
+        <li class="active">任务详情</li>
+    </ul>
 </div>
+<br/>
 <form id="executeForm" action="$ac.contextPath/job/execute" method="post">
     <input type="hidden" id="id" name="id" value="$!data.id" />
 </form>
@@ -77,12 +82,13 @@
             <div class="col-sm-4">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" id="activity" name="activity" disabled="disabled"
-                            #if($!data.isActivity())
-                               checked
-                            #end
-                        />
-                        激活
+                        <label class="pull-left inline">
+                            <input id="activity" name="activity" type="checkbox" class="ace ace-switch ace-switch-5" disabled="disabled"
+                                #if($!data.isActivity())
+                                   checked="checked"
+                                #end/>
+                            <span class="lbl middle"></span>
+                        </label>
                     </label>
                 </div>
             </div>
@@ -108,30 +114,21 @@
                        autocomplete="off"/>
             </div>
         </div>
-        <div class="form-group">
-            <label for="createTime" class="col-sm-2 control-label">创建时间:</label>
-            <div class="col-sm-4">
-
-                <input type="text" readonly="readonly" class="form-control" id="createTime" name="createTime"
-                       value="$!datetool.format('yyyy-MM-dd HH:mm:ss',$!data.createTime)" autocomplete="off"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="modifyTime" class="col-sm-2 control-label">最后修改时间:</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="modifyTime" name="modifyTime" readonly="readonly"
-                       value="$!datetool.format('yyyy-MM-dd HH:mm:ss',$!data.modifyTime)" autocomplete="off"/>
-            </div>
-        </div>
     </fieldset>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button id="backBtn" type="button" class="btn btn-primary">返回</button>
+            <button id="backBtn" type="button" class="btn btn-white btn-info btn-bold">
+                <i class="ace-icon glyphicon glyphicon-backward bigger-120 blue"></i>&nbsp;
+                BACK
+            </button>
             <button id="editBtn" type="button" class="btn btn-white btn-info btn-bold">
-                <i class="ace-icon fa fa-pencil-square-o bigger-120 blue"></i>
+                <i class="ace-icon fa fa-pencil-square-o bigger-120 blue"></i>&nbsp;
                 EDIT
             </button>
-            <button id="executeBtn" type="button" class="btn btn-danger">立即执行任务</button>
+            <button id="executeBtn" type="button" class="btn btn-info">
+                <i class="ace-icon fa fa-fighter-jet bigger-120"></i>&nbsp;
+                EXECUTE
+            </button>
         </div>
     </div>
 </form>
@@ -163,7 +160,7 @@
 
 
     $("#backBtn").click(function () {
-        history.go(-1);
+        window.location.href = "$ac.contextPath/job/list";
     });
 
     $("#editBtn").click(function () {

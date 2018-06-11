@@ -32,7 +32,6 @@
 
 <div class="page-content">
     <div class="row-fluid">
-
         <div class="widget-box ">
             <div class="widget-header">
                 <h4 class="lighter smaller">
@@ -45,7 +44,7 @@
                     </a>
                 </div>
             </div>
-            #*<div class="widget-body">
+            <div class="widget-body">
                 <div class="widget-main no-padding">
                     <div class="dialogs">
                         <div class="itemdiv dialogdiv">
@@ -58,7 +57,7 @@
                                     <span class="green">2018年3月23日</span>
                                 </div>
                                 <div class="name">
-                                    <a>卢云</a>
+                                    <a href="https://github.com/time-sliders/dtss">卢云</a>
                                 </div>
                                 <div class="text">
                                     <ul class="list-unstyled spaced">
@@ -72,7 +71,7 @@
                         </div>
                     </div>
                 </div>
-            </div>*#
+            </div>
         </div>
     </div>
 </div>
