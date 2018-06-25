@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>dtss-server</artifactId>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 
 	<properties>

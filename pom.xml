@@ -59,9 +59,8 @@
     </distributionManagement>
 
     <modules>
+        <module>commons</module>
         <module>client</module>
         <module>server</module>
-        <module>webapp</module>
-        <module>commons</module>
     </modules>
 </project>

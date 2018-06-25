@@ -1,7 +1,7 @@
 package com.dtss.web.controller;
 
-import com.dtss.web.consts.OptStatus;
 import com.dtss.server.service.JobDeleteService;
+import com.dtss.web.consts.OptStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
