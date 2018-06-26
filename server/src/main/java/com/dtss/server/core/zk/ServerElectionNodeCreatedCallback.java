@@ -15,6 +15,6 @@ public class ServerElectionNodeCreatedCallback
     @Override
     public void process() {
         //一旦发现选举节点存在，则服务器尝试竞选Leader
-        ZookeeperLeaderLatch.getInstance().tryMaster();
+        LeaderLatch.getInstance().tryMaster();
     }
 }

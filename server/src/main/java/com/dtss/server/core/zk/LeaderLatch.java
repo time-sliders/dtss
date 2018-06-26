@@ -11,27 +11,29 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
+ * 群首闩
+ *
  * @author luyun
  * @since 2018.01.20 13:01
  */
-public class ZookeeperLeaderLatch extends AsyncTryRunAsMaster<String> implements ZookeeperPathConst {
+public class LeaderLatch extends AsyncTryRunAsMaster<String> implements ZookeeperPathConst {
 
-    private static final Logger logger = LoggerFactory.getLogger(ZookeeperLeaderLatch.class);
+    private static final Logger logger = LoggerFactory.getLogger(LeaderLatch.class);
 
     private static AtomicBoolean hasLeaderShip = new AtomicBoolean(false);
 
     public static final String LOCAL_IP = IPUtils.getLocalIp();
 
-    private static ZookeeperLeaderLatch instance;
+    private static LeaderLatch instance;
 
-    public static ZookeeperLeaderLatch getInstance() {
+    public static LeaderLatch getInstance() {
         if (instance == null) {
             initialInstance();
         }
         return instance;
     }
 
-    private ZookeeperLeaderLatch(String masterPath) {
+    private LeaderLatch(String masterPath) {
         super(masterPath, LOCAL_IP, null);
     }
 
@@ -40,7 +42,7 @@ public class ZookeeperLeaderLatch extends AsyncTryRunAsMaster<String> implements
             return;
         }
         String masterPath = SERVER_ELECTION + MASTER_NODE_NAME;
-        instance = new ZookeeperLeaderLatch(masterPath);
+        instance = new LeaderLatch(masterPath);
     }
 
     @Override
@@ -53,7 +55,7 @@ public class ZookeeperLeaderLatch extends AsyncTryRunAsMaster<String> implements
     }
 
     @Override
-    protected void masterCallback() {
+    protected void leaderCallback() {
         if (hasLeaderShip.compareAndSet(false, true)) {
             logger.info("DTSS>[" + LOCAL_IP + "]成功当选为Leader");
         } else {
@@ -62,7 +64,7 @@ public class ZookeeperLeaderLatch extends AsyncTryRunAsMaster<String> implements
     }
 
     @Override
-    protected void loseCallBack() {
+    protected void flowerCallBack() {
         if (hasLeaderShip.compareAndSet(true, false)) {
             logger.info("DTSS>[" + LOCAL_IP + "]失去了Leader权限");
         }

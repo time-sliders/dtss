@@ -34,27 +34,9 @@ public class Launcher implements InitializingBean, ZookeeperPathConst, SystemSta
     private ClientSystemNodeWatcher clientSystemNodeWatcher;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         initState();
         zooKeeperComponent.addSystemConstructor(this);
-    }
-
-    /**
-     * 竞选leader
-     */
-    private void startLeaderElection() {
-
-
-        // 系统节点
-        ZooKeeperPathNode dtssRootNode = new ZooKeeperPathNode(SYSTEM_ROOT, ZooKeeperConst.EMPTY_DATA, CreateMode.PERSISTENT);
-        // 服务器端ROOT节点
-        ZooKeeperPathNode serverNode = dtssRootNode.addNextPath(SERVER_ROOT, ZooKeeperConst.EMPTY_DATA, CreateMode.PERSISTENT);
-        // Server主控服务选举节点
-        serverNode.addNextPath(SERVER_ELECTION, ZooKeeperConst.EMPTY_DATA, CreateMode.PERSISTENT,
-                new ServerElectionNodeCreatedCallback());
-        // 递归创建目录
-        zooKeeperComponent.createNodeRecursively(dtssRootNode);
-
     }
 
     public void initState() {
@@ -73,6 +55,24 @@ public class Launcher implements InitializingBean, ZookeeperPathConst, SystemSta
          * 监听客户端列表节点的变化
          */
         clientSystemNodeWatcher.startWatch();
+    }
+
+    /**
+     * 竞选leader
+     */
+    private void startLeaderElection() {
+
+
+        // 系统节点
+        ZooKeeperPathNode dtssRootNode = new ZooKeeperPathNode(SYSTEM_ROOT, ZooKeeperConst.EMPTY_DATA, CreateMode.PERSISTENT);
+        // 服务器端ROOT节点
+        ZooKeeperPathNode serverNode = dtssRootNode.addNextPath(SERVER_ROOT, ZooKeeperConst.EMPTY_DATA, CreateMode.PERSISTENT);
+        // Server主控服务选举节点
+        serverNode.addNextPath(SERVER_ELECTION, ZooKeeperConst.EMPTY_DATA, CreateMode.PERSISTENT,
+                new ServerElectionNodeCreatedCallback());
+        // 递归创建目录
+        zooKeeperComponent.createNodeRecursively(dtssRootNode);
+
     }
 
     private void createServerRegistryNode() {

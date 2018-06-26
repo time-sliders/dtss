@@ -9,7 +9,7 @@ import com.dtss.client.enums.OptType;
 import com.dtss.client.model.JobConfig;
 import com.dtss.client.model.JobExecutiveLog;
 import com.dtss.server.core.job.sender.SendDispatcher;
-import com.dtss.server.core.zk.ZookeeperLeaderLatch;
+import com.dtss.server.core.zk.LeaderLatch;
 import com.dtss.server.service.JobQueryService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -46,7 +46,7 @@ public class ServerJobExecutor {
         /*
          * 群首检查
          */
-        if (!ZookeeperLeaderLatch.hasLeaderShip()) {
+        if (!LeaderLatch.hasLeaderShip()) {
             return;
         }
 

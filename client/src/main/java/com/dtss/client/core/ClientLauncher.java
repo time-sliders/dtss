@@ -26,9 +26,9 @@ import java.util.concurrent.*;
  * @author luyun
  * @since 2018.01.27 15:19
  */
-public class ZookeeperClientLauncher implements InitializingBean, ZookeeperPathConst, ZooKeeperConst, SystemStateConstructor {
+public class ClientLauncher implements InitializingBean, ZookeeperPathConst, ZooKeeperConst, SystemStateConstructor {
 
-    private static final Logger logger = LoggerFactory.getLogger(ZookeeperClientLauncher.class);
+    private static final Logger logger = LoggerFactory.getLogger(ClientLauncher.class);
 
     /**
      * 当前应用名称
@@ -88,10 +88,10 @@ public class ZookeeperClientLauncher implements InitializingBean, ZookeeperPathC
         tpe.allowCoreThreadTimeOut(true);
     }
 
-    public ZookeeperClientLauncher() {
+    public ClientLauncher() {
     }
 
-    public ZookeeperClientLauncher(String app) {
+    public ClientLauncher(String app) {
         this.app = app;
         newTaskNodeCreatedWatcher = new NewTaskNodeCreatedWatcher(app);
     }

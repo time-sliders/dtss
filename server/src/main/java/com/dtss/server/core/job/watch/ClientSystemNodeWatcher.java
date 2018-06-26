@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 客户端系统节点监视器
@@ -45,7 +46,8 @@ public class ClientSystemNodeWatcher implements Watcher, ZookeeperPathConst, Zoo
      * 各个应用的存活客户端IP列表
      * 一写多读
      */
-    private Map<String/*app*/, List<String>/*clientIpList*/> systemInfoMap = new HashMap<String, List<String>>();
+    private Map<String/*app*/, List<String>/*clientIpList*/> systemInfoMap
+            = new ConcurrentHashMap<String, List<String>>();
 
 
     //～～～～～～～～～～～～～～～～～～～～/dtss/client～～～～～～～～～～～～～～～～～～～～

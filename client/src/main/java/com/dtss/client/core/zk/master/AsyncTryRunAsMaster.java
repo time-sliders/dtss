@@ -133,14 +133,14 @@ public abstract class AsyncTryRunAsMaster<C> {
             /*
              * 1.当选成功，群首回调
              */
-            masterCallback();
+            leaderCallback();
 
         } else {
 
             /*
              * 2.落选了
              */
-            loseCallBack();
+            flowerCallBack();
         }
 
         /*
@@ -169,7 +169,7 @@ public abstract class AsyncTryRunAsMaster<C> {
         public void process(WatchedEvent event) {
 
             if (event.getState().equals(Event.KeeperState.Expired)) {
-                loseCallBack();
+                flowerCallBack();
             }
 
             switch (event.getType()) {
@@ -193,11 +193,11 @@ public abstract class AsyncTryRunAsMaster<C> {
     /**
      * 群首回调
      */
-    protected abstract void masterCallback();
+    protected abstract void leaderCallback();
 
     /**
      * 落选回调
      */
-    protected abstract void loseCallBack();
+    protected abstract void flowerCallBack();
 
 }

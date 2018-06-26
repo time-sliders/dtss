@@ -30,6 +30,7 @@ public class TryRunAsMaster {
      * @param path      需要创建的路径，如/dtss/master。
      * @param pathData  需要存储的数据，一般为当前Server的唯一标识，如IP等。
      * @return true if success
+     * @see AsyncTryRunAsMaster
      */
     @Deprecated
     public static boolean tryMaster(ZooKeeper zooKeeper, String path, String pathData)

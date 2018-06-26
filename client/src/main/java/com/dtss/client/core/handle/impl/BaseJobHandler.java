@@ -1,9 +1,9 @@
 package com.dtss.client.core.handle.impl;
 
-import com.dtss.client.facade.JobLogFacade;
-import com.dtss.client.model.JobExecutiveLog;
 import com.dtss.client.core.handle.JobHandler;
 import com.dtss.client.enums.JobExeStatusEnum;
+import com.dtss.client.facade.JobLogFacade;
+import com.dtss.client.model.JobExecutiveLog;
 import com.dtss.commons.IPUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public abstract class BaseJobHandler implements JobHandler, ApplicationContextAw
         this.ac = applicationContext;
     }
 
-    protected void startProcessing(Long logId){
+    protected void startProcessing(Long logId) {
         JobExecutiveLog log = new JobExecutiveLog();
         log.setId(logId);
         log.setExecuteClientIp(IPUtils.getLocalIp());

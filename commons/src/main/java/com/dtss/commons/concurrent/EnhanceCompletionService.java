@@ -165,23 +165,8 @@ public class EnhanceCompletionService<V, S> {
         @Override
         public void run() {
 
-            while (true) {
+            while (!isAllTaskSubmitted.get() || dealingTaskCount.get() > 0) {
 
-                if (isAllTaskSubmitted.get() && dealingTaskCount.get() <= 0) {
-                    break;
-                }
-
-                /*
-                 * 1.第一个任务提交过慢问题:
-                 * 消费任务是在最先启动的,该任务只会在任务开始提交或者任务已经全
-                 * 部提交完毕之后开始正式消费
-                 *
-                 * 2.最后一个任务过快执行问题:
-                 * 假设:最后一个任务提交完之后,结果被很快消费处理完
-                 * isAllTaskSubmitted 字段在 CompletionQueueConsumerTask 进入下
-                 * 一次while循环判断的时候,甚至还没来的及置为 true
-                 * 就会导致CompletionQueueConsumerTask 一直等待在take方法,从而死锁在这
-                 */
                 lock.lock();
                 try {
                     if (!isAllTaskSubmitted.get() && dealingTaskCount.get() <= 0) {
@@ -201,7 +186,7 @@ public class EnhanceCompletionService<V, S> {
                         resultHandler.consume(v);
                     } catch (Throwable e) {
                         logger.error(e.getMessage(), e);
-                    } finally{
+                    } finally {
                         dealingTaskCount.decrementAndGet();
                     }
                 }

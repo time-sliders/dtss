@@ -5,7 +5,7 @@ import com.dtss.server.service.JobLogService;
 import com.dtss.client.enums.JobExeStatusEnum;
 import com.dtss.client.model.JobConfig;
 import com.dtss.client.model.JobExecutiveLog;
-import com.dtss.server.core.zk.ZookeeperLeaderLatch;
+import com.dtss.server.core.zk.LeaderLatch;
 import com.dtss.server.service.JobExecutiveLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -30,7 +30,7 @@ public class JobLogServiceImpl implements JobLogService {
         jobExecutiveLog.setApp(jobConfig.getApp());
         jobExecutiveLog.setScheduleTime(startTimeLong);
         jobExecutiveLog.setParam(jobConfig.getParam());
-        jobExecutiveLog.setTriggerServerIp(ZookeeperLeaderLatch.LOCAL_IP);
+        jobExecutiveLog.setTriggerServerIp(LeaderLatch.LOCAL_IP);
         jobExecutiveLog.setJobBeanName(jobConfig.getJobBeanName());
         jobExecutiveLog.setJobId(jobConfig.getId());
         jobExecutiveLog.setName(jobConfig.getName());

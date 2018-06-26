@@ -1,6 +1,6 @@
 package com.dtss.server.core.job;
 
-import com.dtss.server.core.zk.ZookeeperLeaderLatch;
+import com.dtss.server.core.zk.LeaderLatch;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class JobIdGenerator {
     private static final String BACKUP_9_VALUE = "100000000";
 
     public static String generateJobId() {
-        String localIp = ZookeeperLeaderLatch.LOCAL_IP;
+        String localIp = LeaderLatch.LOCAL_IP;
         String ip4 = ipTo12Str(localIp);
         String tss19 = TimeStampSequence.getTimeStampSequence();
         return BACKUP_9_VALUE + ip4 + tss19;
