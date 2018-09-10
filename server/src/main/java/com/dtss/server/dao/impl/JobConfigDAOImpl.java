@@ -34,9 +34,9 @@ public class JobConfigDAOImpl extends SqlSessionDaoSupport implements JobConfigD
     }
 
     @Override
-    public JobConfig findById(String id) {
+    public JobConfig findById(Long id) {
 
-        Assert.hasText(id, "id不能为空");
+        Assert.notNull(id, "id不能为空");
 
         return this.getSqlSession().selectOne("JobConfig.FIND_BY_ID", id);
     }
@@ -71,9 +71,9 @@ public class JobConfigDAOImpl extends SqlSessionDaoSupport implements JobConfigD
     }
 
     @Override
-    public int deleteById(String id) {
+    public int deleteById(Long id) {
 
-        Assert.hasText(id, "id不能为空");
+        Assert.notNull(id, "id不能为空");
 
         return this.getSqlSession().delete("JobConfig.DELETE_BY_ID", id);
     }

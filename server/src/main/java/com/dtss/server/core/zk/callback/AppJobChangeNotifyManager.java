@@ -1,6 +1,6 @@
 package com.dtss.server.core.zk.callback;
 
-import com.dtss.server.core.job.watch.ClientSystemNodeWatcher;
+import com.dtss.server.core.job.ServerQuartzManager;
 import com.dtss.client.consts.ZookeeperPathConst;
 import com.dtss.client.core.zk.ZooKeeperComponent;
 import com.dtss.client.core.zk.callback.NodeCreatedCallback;
@@ -8,6 +8,7 @@ import com.dtss.client.core.zk.consts.ZooKeeperConst;
 import com.dtss.client.core.zk.model.ZooKeeperPathNode;
 import com.dtss.client.core.zk.watcher.AbstractAppWatcher;
 import com.dtss.server.core.job.model.JobChangeNotifyChangeReq;
+import com.dtss.server.core.job.watch.ClientSystemNodeWatcher;
 import com.dtss.server.util.UUIDUtil;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
@@ -28,6 +29,9 @@ public class AppJobChangeNotifyManager implements ZookeeperPathConst {
 
     @Autowired
     private ZooKeeperComponent zooKeeperComponent;
+
+    @Autowired
+    private ServerQuartzManager serverQuartzManager;
 
     @Autowired
     private ClientSystemNodeWatcher clientSystemNodeWatcher;
@@ -97,7 +101,7 @@ public class AppJobChangeNotifyManager implements ZookeeperPathConst {
                     createChangeNotifyNode(app);
                     break;
                 case NodeDataChanged:
-                    clientSystemNodeWatcher.startAppJobsWatch(app);
+                    serverQuartzManager.refreshAllAppJob(app);
                 default:
                     watchChangeNotify(app, this);
             }
@@ -106,7 +110,17 @@ public class AppJobChangeNotifyManager implements ZookeeperPathConst {
 
     //～～～～～～～～～～～～～～～～～～～update～～～～～～～～～～～～～～～～～～～
 
-    public void update(JobChangeNotifyChangeReq req) {
+    public void notifyChange(String app){
+
+        clientSystemNodeWatcher.watchApp(app);
+
+        JobChangeNotifyChangeReq req = new JobChangeNotifyChangeReq();
+        req.setApp(app);
+        req.setData(UUIDUtil.getNew().getBytes());
+        update(req);
+    }
+
+    private void update(JobChangeNotifyChangeReq req) {
         zooKeeperComponent.getZooKeeper()
                 .getData(getJobChangeNotifyNodePath(req.getApp()), false, appJobChangeNotifyUpdateDataCallback, req);
     }

@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS dtss
 
 USE dtss;
 CREATE TABLE dtss.job_config (
-  `id`                  VARCHAR(32)      NOT NULL,
+  `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name`                VARCHAR(64)      DEFAULT NULL
   COMMENT 'JOB名称',
   `app`                 VARCHAR(32)      NOT NULL
@@ -13,15 +13,15 @@ CREATE TABLE dtss.job_config (
   COMMENT '任务类型 JobTypeEnum',
   `trigger_mode`        TINYINT UNSIGNED NOT NULL
   COMMENT '触发模式 JobTriggerMode',
-  `cron`                VARCHAR(32)      DEFAULT NULL
+  `cron`                VARCHAR(20)      DEFAULT NULL
   COMMENT 'JOB执行的corn表达式',
   `job_bean_name`       VARCHAR(64)      NOT NULL
   COMMENT 'JOB 的 springBeanName',
-  `client_ip`           VARCHAR(256)     DEFAULT NULL
+  `client_ip`           VARCHAR(64)     DEFAULT NULL
   COMMENT '客户端IP(绝对单点&单点优先等情况)',
   `activity`            TINYINT UNSIGNED DEFAULT '0'
   COMMENT 'JOB是否激活',
-  `description`         VARCHAR(256)     DEFAULT NULL
+  `description`         VARCHAR(255)     DEFAULT NULL
   COMMENT 'JOB描述',
   `param`               VARCHAR(1024)    DEFAULT NULL
   COMMENT 'job执行参数',
@@ -29,8 +29,6 @@ CREATE TABLE dtss.job_config (
   COMMENT '开发人员手机',
   version               BIGINT DEFAULT 0 NOT NULL
   COMMENT '版本',
-  last_modify_time_long BIGINT DEFAULT 0 NOT NULL
-  COMMENT '最新更新时间',
   `create_time`         DATETIME         DEFAULT NULL
   COMMENT '创建时间',
   `modify_time`         DATETIME         DEFAULT NULL
@@ -46,7 +44,7 @@ CREATE TABLE dtss.job_config (
 
 CREATE TABLE dtss.job_executive_log (
   `id`                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `job_id`            VARCHAR(32)     NOT NULL
+  `job_id`            BIGINT     NOT NULL
   COMMENT 'JOB ID',
   `app`               VARCHAR(32)     NOT NULL
   COMMENT 'JOB所属应用',
@@ -56,9 +54,9 @@ CREATE TABLE dtss.job_executive_log (
   name                VARCHAR(64) COMMENT 'JOB名称',
   `job_bean_name`     VARCHAR(64)     NOT NULL
   COMMENT 'JOB 的 springBeanName',
-  `trigger_server_ip` VARCHAR(32)              DEFAULT NULL
+  `trigger_server_ip` VARCHAR(15)              DEFAULT NULL
   COMMENT '触发服务器IP',
-  `execute_client_ip` VARCHAR(32)              DEFAULT NULL
+  `execute_client_ip` VARCHAR(15)              DEFAULT NULL
   COMMENT '执行客户端IP',
   `start_time`        DATETIME                 DEFAULT NULL
   COMMENT '开始时间',
@@ -68,7 +66,7 @@ CREATE TABLE dtss.job_executive_log (
   COMMENT 'job执行参数',
   `status`            TINYINT                  DEFAULT 0
   COMMENT '执行状态 JobExeStatusEnum',
-  `inner_msg`         VARCHAR(256)             DEFAULT NULL
+  `inner_msg`         VARCHAR(255)             DEFAULT NULL
   COMMENT '内部异常信息 任务调度框架内部处理信息',
   `job_exe_result`    VARCHAR(1024)            DEFAULT NULL
   COMMENT 'job执行结果',
@@ -87,7 +85,7 @@ CREATE TABLE dtss.job_executive_log (
 
 CREATE TABLE dtss.job_executive_log_his (
   `id`                BIGINT UNSIGNED NOT NULL,
-  `job_id`            VARCHAR(32)     NOT NULL
+  `job_id`            BIGINT     NOT NULL
   COMMENT 'JOB ID',
   `app`               VARCHAR(32)     NOT NULL
   COMMENT 'JOB所属应用',
@@ -97,9 +95,9 @@ CREATE TABLE dtss.job_executive_log_his (
   name                VARCHAR(64) COMMENT 'JOB名称',
   `job_bean_name`     VARCHAR(64)     NOT NULL
   COMMENT 'JOB 的 springBeanName',
-  `trigger_server_ip` VARCHAR(32)   DEFAULT NULL
+  `trigger_server_ip` VARCHAR(15)   DEFAULT NULL
   COMMENT '触发服务器IP',
-  `execute_client_ip` VARCHAR(32)   DEFAULT NULL
+  `execute_client_ip` VARCHAR(15)   DEFAULT NULL
   COMMENT '执行客户端IP',
   `start_time`        DATETIME      DEFAULT NULL
   COMMENT '开始时间',
@@ -109,7 +107,7 @@ CREATE TABLE dtss.job_executive_log_his (
   COMMENT 'job执行参数',
   `status`            TINYINT       DEFAULT 0
   COMMENT '执行状态 JobExeStatusEnum',
-  `inner_msg`         VARCHAR(256)  DEFAULT NULL
+  `inner_msg`         VARCHAR(255)  DEFAULT NULL
   COMMENT '内部异常信息 任务调度框架内部处理信息',
   `job_exe_result`    VARCHAR(1024) DEFAULT NULL
   COMMENT 'job执行结果',

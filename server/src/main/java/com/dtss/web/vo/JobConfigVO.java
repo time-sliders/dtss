@@ -12,7 +12,7 @@ import com.dtss.client.enums.JobTypeEnum;
  */
 public class JobConfigVO {
 
-    private String id;
+    private Long id;
 
     /**
      * JOB名称
@@ -53,11 +53,11 @@ public class JobConfigVO {
      */
     private Boolean activity;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -10,13 +10,15 @@ import com.dtss.client.core.zk.watcher.AbstractAppWatcher;
 import com.dtss.server.core.job.ServerQuartzManager;
 import com.dtss.server.core.zk.callback.AppJobChangeNotifyManager;
 import org.apache.commons.lang.StringUtils;
-import org.apache.zookeeper.*;
+import org.apache.zookeeper.AsyncCallback;
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.WatchedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -29,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2018.01.28 12:03
  */
 @Component
-public class ClientSystemNodeWatcher implements Watcher, ZookeeperPathConst, ZooKeeperConst {
+public class ClientSystemNodeWatcher implements ZookeeperPathConst, ZooKeeperConst {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientSystemNodeWatcher.class);
 
@@ -37,10 +39,10 @@ public class ClientSystemNodeWatcher implements Watcher, ZookeeperPathConst, Zoo
     private ZooKeeperComponent zooKeeperComponent;
 
     @Autowired
-    private ServerQuartzManager serverQuartzManager;
+    private AppJobChangeNotifyManager appJobChangeNotifyManager;
 
     @Autowired
-    private AppJobChangeNotifyManager appJobChangeNotifyManager;
+    private ServerQuartzManager serverQuartzManager;
 
     /**
      * 各个应用的存活客户端IP列表
@@ -49,68 +51,26 @@ public class ClientSystemNodeWatcher implements Watcher, ZookeeperPathConst, Zoo
     private Map<String/*app*/, List<String>/*clientIpList*/> systemInfoMap
             = new ConcurrentHashMap<String, List<String>>();
 
-
     //～～～～～～～～～～～～～～～～～～～～/dtss/client～～～～～～～～～～～～～～～～～～～～
 
-    public void startWatch() {
-        zooKeeperComponent.getZooKeeper().
-                getChildren(CLIENT_ROOT, this, clientChildrenCallback, null);
-    }
+    public void watchApp(String app) {
 
-    @Override
-    public void process(WatchedEvent event) {
-        switch (event.getType()) {
-            case NodeDeleted:
-                logger.info("[DTSS]接入应用父节点[" + event.getPath() + "]被意外删除,尝试重建...");
-                tryCreateClientNode();
-                break;
-            case NodeChildrenChanged:
-                logger.info("[DTSS]发现新系统加入或移除,开始加载系统列表");
-            default:
-                logger.info("ClientSystemNodeWatcher " + event.getState() + "|" + event.getType());
-                startWatch();
-        }
-    }
-
-    private AsyncCallback.ChildrenCallback clientChildrenCallback = new AsyncCallback.ChildrenCallback() {
-
-        @Override
-        public void processResult(int rc, String path, Object ctx, List<String> children) {
-            KeeperException.Code code = KeeperException.Code.get(rc);
-            switch (code) {
-                case OK:
-                    int num = children == null || children.isEmpty() ? 0 : children.size();
-                    initialSystemMap(children);
-                    logger.info("[DTSS]已接入系统总数:" + num);
-                    break;
-                case NONODE:
-                    tryCreateClientNode();
-                    break;
-                default:
-            }
-        }
-    };
-
-    private void initialSystemMap(List<String> children) {
-
-        if (children == null || children.size() == 0) {
+        if (StringUtils.isBlank(app)) {
             return;
         }
 
-        for (String app : children) {
-            if (systemInfoMap.containsKey(app)) {
-                continue;
-            }
-
-            // 监控应用的注册节点
-            startAppClientsWatch(app);
-
-            // 监控应用的JOB配置节点
-            startAppJobsWatch(app);
-
-            // 监控应用的job_change_notify更新通知节点
-            appJobChangeNotifyManager.watchChangeNotify(app, null);
+        if (systemInfoMap.containsKey(app)) {
+            return;
         }
+
+        // 监控应用的注册节点
+        startAppClientsWatch(app);
+
+        // 监控应用的job_change_notify更新通知节点
+        appJobChangeNotifyManager.watchChangeNotify(app, null);
+
+        // 加载应用所有数据
+        serverQuartzManager.refreshAllAppJob(app);
     }
 
     //～～～～～～～～～～～～～～～～～～～～/dtss/client/APP_X/clients～～～～～～～～～～～～～～～～～～～～
@@ -165,26 +125,6 @@ public class ClientSystemNodeWatcher implements Watcher, ZookeeperPathConst, Zoo
     };
 
     /**
-     * 尝试创建/dtss/client/systems节点
-     */
-    private void tryCreateClientNode() {
-
-        ZooKeeperPathNode systemNode =
-                new ZooKeeperPathNode(SYSTEM_ROOT, EMPTY_DATA, CreateMode.PERSISTENT);
-
-        systemNode
-                .addNextPath(CLIENT_ROOT, EMPTY_DATA, CreateMode.PERSISTENT, null,
-                        new NodeCreatedCallback() {
-                            @Override
-                            public void process() {
-                                startWatch();
-                            }
-                        });
-
-        zooKeeperComponent.createNodeRecursively(systemNode);
-    }
-
-    /**
      * 尝试创建/dtss/client/systems/APP_XXX/clients节点
      */
     private void tryCreateClientsNode(final String app) {
@@ -204,80 +144,6 @@ public class ClientSystemNodeWatcher implements Watcher, ZookeeperPathConst, Zoo
                             @Override
                             public void process() {
                                 startAppClientsWatch(app);
-                            }
-                        });
-
-        zooKeeperComponent.createNodeRecursively(systemNode);
-    }
-
-    //～～～～～～～～～～～～～～～～～～～～/dtss/client/APP_X/jobs～～～～～～～～～～～～～～～～～～～～
-    public void startAppJobsWatch(String app) {
-        zooKeeperComponent.getZooKeeper()
-                .getChildren(CLIENT_SYSTEM_ROOT + I + app + JOBS_NODE_NAME,
-                        new AppJobsNodeWatcher(app),
-                        appJobsChildrenCallback, app);
-    }
-
-    class AppJobsNodeWatcher extends AbstractAppWatcher {
-
-        AppJobsNodeWatcher(String app) {
-            super(app);
-        }
-
-        @Override
-        public void process(WatchedEvent event) {
-            switch (event.getType()) {
-                case NodeDeleted:
-                    logger.warn("[DTSS]应用[" + app + "]的任务注册父节点[" + event.getPath() + "]被意外删除,尝试重建...");
-                    tryCreateJobsNode(app);
-                    break;
-                case NodeChildrenChanged:
-                    logger.info("[DTSS]应用[" + app + "]的有新任务加入或移除,开始刷新任务数据");
-                default:
-                    startAppJobsWatch(app);
-            }
-        }
-    }
-
-    private AsyncCallback.ChildrenCallback appJobsChildrenCallback = new AsyncCallback.ChildrenCallback() {
-        @Override
-        public void processResult(int rc, String path, Object ctx, List<String> children) {
-            String app = (String) ctx;
-            switch (KeeperException.Code.get(rc)) {
-                case OK:
-                    int num = children == null || children.isEmpty() ? 0 : children.size();
-                    logger.info("[DTSS]开始刷新应用[" + app + "]的本地任务缓存数据, 任务总量:" + num
-                            + ",任务列表:" + JSON.toJSONString(children));
-                    serverQuartzManager.refreshAllAppJob(app, children);
-                    break;
-                case NONODE:
-                    tryCreateJobsNode((String) ctx);
-                    break;
-                default:
-            }
-        }
-    };
-
-    /**
-     * 尝试创建/dtss/client/systems/APP_XXX/jobs节点
-     */
-    private void tryCreateJobsNode(final String app) {
-
-        ZooKeeperPathNode systemNode =
-                new ZooKeeperPathNode(SYSTEM_ROOT, EMPTY_DATA, CreateMode.PERSISTENT);
-
-        String appPath = CLIENT_SYSTEM_ROOT + I + app;
-        String appJobsPath = appPath + JOBS_NODE_NAME;
-
-        systemNode
-                .addNextPath(CLIENT_ROOT, EMPTY_DATA, CreateMode.PERSISTENT)
-                .addNextPath(CLIENT_SYSTEM_ROOT, EMPTY_DATA, CreateMode.PERSISTENT)
-                .addNextPath(appPath, EMPTY_DATA, CreateMode.PERSISTENT)
-                .addNextPath(appJobsPath, EMPTY_DATA, CreateMode.PERSISTENT, null,
-                        new NodeCreatedCallback() {
-                            @Override
-                            public void process() {
-                                startAppJobsWatch(app);
                             }
                         });
 
@@ -310,7 +176,6 @@ public class ClientSystemNodeWatcher implements Watcher, ZookeeperPathConst, Zoo
         }
         return systemInfoMap.get(app);
     }
-
 
 
 }

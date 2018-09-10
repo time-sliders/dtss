@@ -14,7 +14,7 @@ public class JobExecutiveLog implements Serializable {
     /**
      * JOB ID
      */
-    private String jobId;
+    private Long jobId;
 
     /**
      * JOB所属应用
@@ -101,11 +101,11 @@ public class JobExecutiveLog implements Serializable {
         this.id = id;
     }
 
-    public String getJobId() {
+    public Long getJobId() {
         return jobId;
     }
 
-    public void setJobId(String jobId) {
+    public void setJobId(Long jobId) {
         this.jobId = jobId;
     }
 

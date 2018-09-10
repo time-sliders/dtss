@@ -12,6 +12,4 @@ public interface JobModifyService {
 
     Result<Void> updateById(JobConfig jobConfig);
 
-    void sendZkModifyReq(JobConfig jobConfig);
-
 }

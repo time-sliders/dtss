@@ -3,7 +3,7 @@ package com.dtss.server.job;
 import com.dtss.client.core.AbstractJob;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.util.Random;
 
 /**
  * @author LuYun
@@ -17,7 +17,7 @@ public class PerformanceTestJob extends AbstractJob {
 
         while (!isTerminated()) {
             try {
-                Thread.sleep(1000L);
+                Thread.sleep(new Random().nextInt(1000));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

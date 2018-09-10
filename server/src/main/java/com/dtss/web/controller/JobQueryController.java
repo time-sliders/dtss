@@ -46,7 +46,7 @@ public class JobQueryController extends BaseController {
     }
 
     @RequestMapping("/view")
-    public String view(@RequestParam String id, Model model) {
+    public String view(@RequestParam Long id, Model model) {
         JobConfig jobConfig = jobQueryService.findById(id);
         model.addAttribute("data", jobConfig);
         return "jobInfo/view";

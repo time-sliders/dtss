@@ -19,7 +19,7 @@ public class ZkCmd {
     /**
      * 任务ID
      */
-    private String jobId;
+    private Long jobId;
 
     /**
      * 日志Id
@@ -49,11 +49,11 @@ public class ZkCmd {
      */
     private String param;
 
-    public String getJobId() {
+    public Long getJobId() {
         return jobId;
     }
 
-    public void setJobId(String jobId) {
+    public void setJobId(Long jobId) {
         this.jobId = jobId;
     }
 

@@ -53,11 +53,6 @@ public class JobConfigQuery extends Query implements Serializable {
 
     private Long version;
 
-    /**
-     * lastModifyTimeLong >= egtLastModifyTimeLong
-     */
-    private Long egtLastModifyTimeLong;
-
     public Long getId() {
         return id;
     }
@@ -130,11 +125,4 @@ public class JobConfigQuery extends Query implements Serializable {
         this.version = version;
     }
 
-    public Long getEgtLastModifyTimeLong() {
-        return egtLastModifyTimeLong;
-    }
-
-    public void setEgtLastModifyTimeLong(Long egtLastModifyTimeLong) {
-        this.egtLastModifyTimeLong = egtLastModifyTimeLong;
-    }
 }

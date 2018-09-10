@@ -25,7 +25,7 @@ public class SchedulerWrapper implements InitializingBean {
      * 根据jobConfig的name、group获取JobKey
      */
     public JobKey getJobKeyByJobConfig(JobConfig cfg) {
-        String name = cfg.getId();
+        String name = String.valueOf(cfg.getId());
         String group = cfg.getApp();
         return JobKey.jobKey(name, group);
     }
@@ -34,7 +34,7 @@ public class SchedulerWrapper implements InitializingBean {
      * 根据jobConfig的name、group获取TriggerKey
      */
     public TriggerKey getTriggerKeyByJobConfig(JobConfig cfg) {
-        String name = cfg.getId();
+        String name = String.valueOf(cfg.getId());
         String group = cfg.getApp();
         return TriggerKey.triggerKey(name, group);
     }

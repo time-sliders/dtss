@@ -1,7 +1,6 @@
 package com.dtss.server.core.job;
 
 import com.dtss.commons.DateUtil;
-import com.dtss.server.core.job.async.DeleteJobHandler;
 import com.dtss.server.core.job.sender.JobSender;
 import com.dtss.server.service.JobLogService;
 import com.dtss.client.consts.JobConst;
@@ -39,9 +38,9 @@ public class ServerJobExecutor {
     private JobLogService logService;
 
     @Autowired
-    private DeleteJobHandler deleteJobHandler;
+    private ServerQuartzManager serverQuartzManager;
 
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(JobExecutionContext context)  {
 
         /*
          * 群首检查
@@ -53,7 +52,7 @@ public class ServerJobExecutor {
         /*
          * 信息验证
          */
-        String id = (String) context.getMergedJobDataMap().get(JobConst.ID);
+        Long id = (Long) context.getMergedJobDataMap().get(JobConst.ID);
         String app = (String) context.getMergedJobDataMap().get(JobConst.APP);
         JobConfig jobConfig = jobQueryService.findById(id);
         if (jobConfig == null || !jobConfig.isActivity()) {
@@ -61,7 +60,7 @@ public class ServerJobExecutor {
             JobConfig unExistsJob = new JobConfig();
             unExistsJob.setId(id);
             unExistsJob.setApp(app);
-            deleteJobHandler.submitAsyncTask(unExistsJob);
+            serverQuartzManager.deleteLocalJob(jobConfig);
             return;
         }
 

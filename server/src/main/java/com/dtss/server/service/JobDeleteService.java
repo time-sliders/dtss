@@ -10,5 +10,5 @@ public interface JobDeleteService {
     /**
      * 删除任务
      */
-    boolean deleteJob(String id);
+    boolean deleteJob(Long id);
 }

@@ -30,5 +30,5 @@ public interface JobQueryService {
      *
      * @param id 数据库ID
      */
-    JobConfig findById(String id);
+    JobConfig findById(Long id);
 }

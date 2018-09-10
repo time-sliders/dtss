@@ -1,7 +1,7 @@
 package com.dtss.server.service.impl;
 
 import com.dtss.client.model.JobConfig;
-import com.dtss.server.core.job.async.DeleteJobHandler;
+import com.dtss.server.core.zk.callback.AppJobChangeNotifyManager;
 import com.dtss.server.dao.JobConfigDAO;
 import com.dtss.server.service.JobDeleteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ public class JobDeleteServiceImpl implements JobDeleteService {
     private JobConfigDAO jobConfigDAO;
 
     @Autowired
-    private DeleteJobHandler deleteJobHandler;
+    private AppJobChangeNotifyManager appJobChangeNotifyManager;
 
     @Override
-    public boolean deleteJob(String id) {
+    public boolean deleteJob(Long id) {
         JobConfig jobConfig = jobConfigDAO.findById(id);
         if (jobConfig == null) {
             return true;
@@ -30,7 +30,7 @@ public class JobDeleteServiceImpl implements JobDeleteService {
 
         int num = jobConfigDAO.deleteById(id);
         if (num > 0) {
-            deleteJobHandler.submitAsyncTask(jobConfig);
+            appJobChangeNotifyManager.notifyChange(jobConfig.getApp());
             return true;
         } else {
             return false;

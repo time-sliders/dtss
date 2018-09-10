@@ -11,7 +11,7 @@ public class JobPathUtil implements ZookeeperPathConst, CmdConst {
 
     private static final String LINE = "_";
 
-    public static String buildTaskAssignNode(String app, String jobId, String scheduleTime, String clientIp) {
+    public static String buildTaskAssignNode(String app, Long jobId, String scheduleTime, String clientIp) {
         String taskKey = EXE_CMD_PREFIX + scheduleTime + LINE + jobId;
         return getTaskAssignPath(app, clientIp) + I + taskKey;
     }

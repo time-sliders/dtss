@@ -24,7 +24,7 @@ public class JobDeleteController extends BaseController implements OptStatus {
 
     @ResponseBody
     @RequestMapping("/delete")
-    public Map<String, Object> delete(@RequestParam String id) {
+    public Map<String, Object> delete(@RequestParam Long id) {
         Map<String, Object> mapResult = new HashMap<String, Object>();
 
         if (jobDeleteService.deleteJob(id)) {

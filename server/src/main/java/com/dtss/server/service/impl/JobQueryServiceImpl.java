@@ -30,7 +30,7 @@ public class JobQueryServiceImpl implements JobQueryService {
     }
 
     @Override
-    public JobConfig findById(String id) {
+    public JobConfig findById(Long id) {
         return jobConfigDAO.findById(id);
     }
 }

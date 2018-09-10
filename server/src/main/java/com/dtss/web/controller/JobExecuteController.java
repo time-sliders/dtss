@@ -43,7 +43,7 @@ public class JobExecuteController extends BaseController implements OptStatus {
     private JobStopExecutor jobStopExecutor;
 
     @RequestMapping(value = "/execute", method = RequestMethod.POST)
-    public String execute(@RequestParam String id, Model model) {
+    public String execute(@RequestParam Long id, Model model) {
         JobConfig jobConfig = jobQueryService.findById(id);
         JobExecutiveLog log = jobExecutor.executeJobWithoutLeaderCheck(jobConfig);
         model.addAttribute("data", jobLogDetailVOConverter.toDto(logQueryService.findById(log.getId())));

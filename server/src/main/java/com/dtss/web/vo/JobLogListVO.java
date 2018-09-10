@@ -9,7 +9,7 @@ public class JobLogListVO {
 
     private Long id;
 
-    private String jobId;
+    private Long jobId;
 
     private String name;
 
@@ -41,11 +41,11 @@ public class JobLogListVO {
         this.id = id;
     }
 
-    public String getJobId() {
+    public Long getJobId() {
         return jobId;
     }
 
-    public void setJobId(String jobId) {
+    public void setJobId(Long jobId) {
         this.jobId = jobId;
     }
 

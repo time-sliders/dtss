@@ -26,6 +26,4 @@ public class UUIDUtil {
             throw new RuntimeException(e);
         }
     }
-
-
 }

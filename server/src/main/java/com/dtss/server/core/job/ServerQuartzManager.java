@@ -2,13 +2,11 @@ package com.dtss.server.core.job;
 
 import com.alibaba.fastjson.JSON;
 import com.dtss.client.consts.ZookeeperPathConst;
-import com.dtss.client.core.zk.ZooKeeperComponent;
 import com.dtss.client.enums.JobTriggerMode;
 import com.dtss.client.model.JobConfig;
+import com.dtss.client.model.query.JobConfigQuery;
+import com.dtss.server.service.JobQueryService;
 import org.apache.commons.collections.MapUtils;
-import org.apache.zookeeper.AsyncCallback;
-import org.apache.zookeeper.KeeperException;
-import org.apache.zookeeper.data.Stat;
 import org.quartz.JobDetail;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,148 +36,114 @@ public class ServerQuartzManager implements ZookeeperPathConst {
     private SchedulerWrapper schedulerWrapper;
 
     @Autowired
-    private ZooKeeperComponent zooKeeperComponent;
+    private JobQueryService jobQueryService;
 
     /**
      * 应用内缓存
      */
-    private Map<String/*app*/, Map<String/*jobId*/, JobConfig>> localJobCache = new ConcurrentHashMap<String, Map<String, JobConfig>>();
+    private Map<String/*app*/, Map<Long/*jobId*/, JobConfig>> localJobCache = new ConcurrentHashMap<String, Map<Long, JobConfig>>();
 
     /**
      * 刷新指定的App的所有Job信息
      */
-    public void refreshAllAppJob(String app, List<String> zkRegisteredJobList) {
+    public void refreshAllAppJob(String app) {
 
-        Map<String/*jobId*/, JobConfig> localCachedJobMap = localJobCache.get(app);
-        boolean isZkEmpty = CollectionUtils.isEmpty(zkRegisteredJobList);
-        boolean isLocalEmpty = MapUtils.isEmpty(localCachedJobMap);
+        JobConfigQuery query = new JobConfigQuery();
+        query.setApp(app);
+        query.setActivity(true);
+        query.setTriggerMode(JobTriggerMode.AUTOMATIC.getCode());
+        List<JobConfig> dbJobList = jobQueryService.query(query);
+        Map<Long/*jobId*/, JobConfig> localCachedJobMap = localJobCache.get(app);
+        boolean isDBEmpty = CollectionUtils.isEmpty(dbJobList);
+        boolean isMemEmpty = MapUtils.isEmpty(localCachedJobMap);
 
-        if (isZkEmpty && !isLocalEmpty) {
-            deleteAllLocalJob(localCachedJobMap);
+        if (isDBEmpty && !isMemEmpty) {
+            deleteAllMemJob(localCachedJobMap);
 
-        } else if (!isZkEmpty && isLocalEmpty) {
-            addAllZkJobToLocal(app, zkRegisteredJobList);
+        } else if (!isDBEmpty && isMemEmpty) {
+            addAllDBJobToMem(dbJobList);
 
-        } else if (!isZkEmpty) {
+        } else if (!isDBEmpty) {
             // 差异对比
             // 删除本地缓存存在但是ZK已经不存在的数据
-            for (Map.Entry<String, JobConfig> entry : localCachedJobMap.entrySet()) {
+            for (Map.Entry<Long, JobConfig> entry : localCachedJobMap.entrySet()) {
                 JobConfig localJobConfig = entry.getValue();
-                boolean isZkExistsJob = false;
-                String localJobId = localJobConfig.getId();
-                for (String zkJobId : zkRegisteredJobList) {
-                    if (zkJobId.equals(localJobId)) {
-                        isZkExistsJob = true;
+                boolean isDBExistsJob = false;
+                Long memJobId = localJobConfig.getId();
+                for (JobConfig dbJob : dbJobList) {
+                    if (dbJob.getId().equals(memJobId)) {
+                        isDBExistsJob = true;
                     }
                 }
 
-                if (!isZkExistsJob) {
+                if (!isDBExistsJob) {
                     deleteLocalJob(localJobConfig);
                 }
             }
 
-            // ZK存在，本地有数据，或者没有数据时，更新本地数据
-            for (String jobId : zkRegisteredJobList) {
-                addOrUpdateLocalJob(app, getJobNodePath(app, jobId));
+            // DB存在，本地有数据，或者没有数据时，更新本地数据
+            for (JobConfig dbJob : dbJobList) {
+                updateLocalCache(dbJob);
             }
         }
     }
 
-    private void addAllZkJobToLocal(String app, List<String> zkRegisteredJobList) {
-        for (String jobId : zkRegisteredJobList) {
-            addOrUpdateLocalJob(app, getJobNodePath(app, jobId));
+    private void addAllDBJobToMem(List<JobConfig> dbJobList) {
+        for (JobConfig jobConfig : dbJobList) {
+            updateLocalCache(jobConfig);
         }
     }
 
+    public void updateLocalCache(JobConfig jobConfig) {
 
-    private void addOrUpdateLocalJob(String app, String zkJobConfigPath) {
-        zooKeeperComponent.getZooKeeper()
-                .getData(zkJobConfigPath, false, zkJobDataCallback, app);
-    }
+        String app = jobConfig.getApp();
 
-    private AsyncCallback.DataCallback zkJobDataCallback = new AsyncCallback.DataCallback() {
-        @Override
-        public void processResult(int rc, String path, Object ctx, byte[] data, Stat stat) {
-            KeeperException.Code code = KeeperException.Code.get(rc);
-            String app = (String) ctx;
-            switch (code) {
-                case CONNECTIONLOSS:
-                    logger.info("[DTSS]ZooKeeper获取任务节点数据时连接丢失,重新查询...");
-                    addOrUpdateLocalJob(app, path);
-                    break;
-                case OK:
-                    if (data == null) {
-                        logger.info("[DTSS]ZooKeeper获取任务节点[" + path + "]数据时异常,节点数据为空");
-                        return;
-                    }
-                    JobConfig zkJobConfig;
-                    try {
-                        String zkJobDataStr = new String(data, "UTF-8");
-                        zkJobConfig = JSON.parseObject(zkJobDataStr, JobConfig.class);
-                    } catch (UnsupportedEncodingException e) {
-                        logger.info("[DTSS]ZooKeeper任务节点[" + path + "]数据解码失败,请检查!!!!", e);
-                        return;
-                    }
-                    updateLocalCache(app, zkJobConfig);
-                    break;
-                case NONODE:
-                    logger.info("[DTSS]ZooKeeper获取任务节点[" + path + "]时,节点不存在!!");
-                    break;
-                default:
-                    logger.info("zkJobDataCallback resp warn > path:" + path + ",code:" + code);
-            }
-        }
-    };
-
-    private void updateLocalCache(String app, JobConfig zkJobConfig) {
-
-        if (zkJobConfig == null || !zkJobConfig.isActivity()
-                || !zkJobConfig.getTriggerMode().equals(JobTriggerMode.AUTOMATIC.getCode())) {
+        if (!jobConfig.isActivity()
+                || !jobConfig.getTriggerMode().equals(JobTriggerMode.AUTOMATIC.getCode())) {
             return;
         }
 
-        String jobId = zkJobConfig.getId();
-        Map<String/*jobId*/, JobConfig> localJobConfigMap = localJobCache.get(app);
+        Long jobId = jobConfig.getId();
+        Map<Long/*jobId*/, JobConfig> localJobConfigMap = localJobCache.get(app);
         if (localJobConfigMap == null) {
-            localJobConfigMap = new ConcurrentHashMap<String, JobConfig>();
+            localJobConfigMap = new ConcurrentHashMap<Long, JobConfig>();
             localJobCache.put(app, localJobConfigMap);
         }
 
         JobConfig localJobConfig = localJobConfigMap.get(jobId);
-        if (localJobConfig != null && localJobConfig.getVersion() > zkJobConfig.getVersion()) {
+        if (localJobConfig != null && localJobConfig.getVersion() > jobConfig.getVersion()) {
             return;
         }
 
         try {
-            JobDetail jobDetail = schedulerWrapper.createJobDetailByJobConfig(zkJobConfig, ServerQuartzTriggerJob.class);
-            Trigger trigger = schedulerWrapper.createCronTrigger(zkJobConfig);
+            JobDetail jobDetail = schedulerWrapper.createJobDetailByJobConfig(jobConfig, ServerQuartzTriggerJob.class);
+            Trigger trigger = schedulerWrapper.createCronTrigger(jobConfig);
             schedulerWrapper.scheduleJob(jobDetail, trigger);
+            logger.info("[DTSS]定制任务到本地成功 > app: " + jobConfig.getApp() + ", name: " + jobConfig.getName());
         } catch (SchedulerException e) {
-            logger.error("[DTSS][Quartz]定制任务到本地异常:jobConfig:" + JSON.toJSONString(zkJobConfig), e);
+            logger.error("[DTSS][Quartz]定制任务到本地异常:jobConfig:" + JSON.toJSONString(jobConfig), e);
             return;
         }
 
-        localJobConfigMap.put(zkJobConfig.getId(), zkJobConfig);
-        logger.info("[DTSS][Quartz]定制任务到本地成功:[" + app + "][" + zkJobConfig.getName() + "]");
+        localJobConfigMap.put(jobConfig.getId(), jobConfig);
+        logger.info("[DTSS][Quartz]定制任务到本地成功:[" + app + "][" + jobConfig.getName() + "]");
     }
 
 
-    private void deleteAllLocalJob(Map<String, JobConfig> localCachedJobMap) {
-        for (Iterator<Map.Entry<String, JobConfig>> i = localCachedJobMap.entrySet().iterator(); i.hasNext(); ) {
-            Map.Entry<String, JobConfig> entry = i.next();
+    private void deleteAllMemJob(Map<Long, JobConfig> localCachedJobMap) {
+        for (Iterator<Map.Entry<Long, JobConfig>> i = localCachedJobMap.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry<Long, JobConfig> entry = i.next();
             JobConfig jobConfig = entry.getValue();
             if (deleteLocalJob(jobConfig)) {
                 i.remove();
-                logger.info("[DTSS][Quartz]移除任务[" + jobConfig.getName() + "-" + jobConfig.getJobBeanName()
-                        + "]成功");
+                logger.info("[DTSS][Quartz]移除任务[" + jobConfig.getName() + "-" + jobConfig.getJobBeanName() + "]成功");
             } else {
-                logger.info("[DTSS][Quartz]移除任务[" + jobConfig.getName() + "-" + jobConfig.getJobBeanName()
-                        + "]失败!!!");
+                logger.info("[DTSS][Quartz]移除任务[" + jobConfig.getName() + "-" + jobConfig.getJobBeanName() + "]失败!!!");
             }
         }
     }
 
-    private boolean deleteLocalJob(JobConfig jobConfig) {
+    public boolean deleteLocalJob(JobConfig jobConfig) {
         try {
             schedulerWrapper.deleteJob(schedulerWrapper.getJobKeyByJobConfig(jobConfig));
             localJobCache.get(jobConfig.getApp()).remove(jobConfig.getId());
@@ -189,10 +152,6 @@ public class ServerQuartzManager implements ZookeeperPathConst {
             logger.error("dtss delete job failed:" + JSON.toJSONString(jobConfig), e);
             return false;
         }
-    }
-
-    private String getJobNodePath(String app, String jobId) {
-        return CLIENT_SYSTEM_ROOT + I + app + JOBS_NODE_NAME + I + jobId;
     }
 
 }

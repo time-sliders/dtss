@@ -16,7 +16,6 @@
         <result column="param" property="param"/>
         <result column="owner_phone" property="ownerPhone"/>
         <result column="version" property="version"/>
-        <result column="last_modify_time_long" property="lastModifyTimeLong"/>
         <result column="create_time" property="createTime"/>
         <result column="modify_time" property="modifyTime"/>
     </resultMap>
@@ -24,16 +23,16 @@
     <sql id="Base_Column_List">
         id,name,app,type,trigger_mode,
         cron,job_bean_name,client_ip,activity,description,
-        param,owner_phone,version,last_modify_time_long,create_time,modify_time
+        param,owner_phone,version,create_time,modify_time
     </sql>
 
-    <select id="FIND_BY_ID" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="FIND_BY_ID" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from job_config where id = #{id}
     </select>
 
-    <select id="DELETE_BY_ID" parameterType="java.lang.String" resultType="java.lang.Integer">
+    <select id="DELETE_BY_ID" parameterType="java.lang.Long" resultType="java.lang.Integer">
         delete from job_config where id = #{id}
     </select>
 
@@ -65,17 +64,14 @@
         <if test="gtId != null">
             and id &gt; #{gtId}
         </if>
-        <if test="egtLastModifyTimeLong != null">
-            and last_modify_time_long &gt;= #{egtLastModifyTimeLong}
-        </if>
     </sql>
 
-    <insert id="INSERT" parameterType="JobConfig">
+    <insert id="INSERT" parameterType="JobConfig" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO job_config (<include refid="Base_Column_List"/>)
         VALUES(
         #{id},#{name},#{app},#{type},#{triggerMode},
         #{cron},#{jobBeanName},#{clientIp},#{isActivity},#{description},
-        #{param},#{ownerPhone},#{version},#{lastModifyTimeLong},#{createTime},#{modifyTime}
+        #{param},#{ownerPhone},#{version},#{createTime},#{modifyTime}
         )
     </insert>
 
@@ -114,7 +110,6 @@
                 owner_phone=#{ownerPhone},
             </if>
             version=#{version}+1,
-            last_modify_time_long=#{lastModifyTimeLong},
             modify_time=#{modifyTime},
         </set>
         where id = #{id} and version = #{version}

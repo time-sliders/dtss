@@ -2,25 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
-    <bean id="quartzTaskThreadFactory" class="com.dtss.server.core.job.QuartzThreadFactory"/>
-    <bean id="quartzTaskWorkQueue" class="java.util.concurrent.LinkedBlockingQueue"/>
-    <bean id="quartzTaskExecutor" class="java.util.concurrent.ThreadPoolExecutor">
-        <constructor-arg index="0" value="30"/>
-        <constructor-arg index="1" value="30"/>
-        <constructor-arg index="2" value="10"/>
-        <constructor-arg index="3" type="java.util.concurrent.TimeUnit" value="SECONDS"/>
-        <constructor-arg index="4" ref="quartzTaskWorkQueue"/>
-        <constructor-arg index="5" ref="quartzTaskThreadFactory"/>
-    </bean>
-
     <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="taskExecutor" ref="quartzTaskExecutor"/>
-        <!--<property name="quartzProperties">
+        <property name="quartzProperties" >
             <props>
                 <prop key="org.quartz.threadPool.threadCount">${org.quartz.threadPool.threadCount}</prop>
                 <prop key="org.quartz.threadPool.threadNamePrefix">${org.quartz.threadPool.threadNamePrefix}</prop>
             </props>
-        </property>-->
+        </property>
     </bean>
 
 </beans>

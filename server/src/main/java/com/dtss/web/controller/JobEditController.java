@@ -34,7 +34,7 @@ public class JobEditController extends BaseController implements OptStatus {
     private ServerJobExecutor jobExecutor;
 
     @RequestMapping("/toedit")
-    public String toEdit(@RequestParam String id, Model model) {
+    public String toEdit(@RequestParam Long id, Model model) {
         JobConfig jobConfig = jobQueryService.findById(id);
         model.addAttribute("data", jobConfig);
         return "jobInfo/edit";

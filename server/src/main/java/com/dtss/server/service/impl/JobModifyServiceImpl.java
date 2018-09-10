@@ -1,13 +1,12 @@
 package com.dtss.server.service.impl;
 
 import com.dtss.commons.Result;
-import com.dtss.server.core.job.async.DeleteJobHandler;
-import com.dtss.server.core.job.async.ModifyJobHandler;
-import com.dtss.server.core.job.model.JobModifyReq;
+import com.dtss.server.core.job.model.JobChangeNotifyChangeReq;
+import com.dtss.server.core.zk.callback.AppJobChangeNotifyManager;
 import com.dtss.server.dao.JobConfigDAO;
 import com.dtss.server.service.JobModifyService;
-import com.dtss.client.enums.JobTriggerMode;
 import com.dtss.client.model.JobConfig;
+import com.dtss.server.util.UUIDUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,10 +23,7 @@ public class JobModifyServiceImpl implements JobModifyService {
     private JobConfigDAO jobConfigDAO;
 
     @Autowired
-    private ModifyJobHandler modifyJobHandler;
-
-    @Autowired
-    private DeleteJobHandler deleteJobHandler;
+    private AppJobChangeNotifyManager appJobChangeNotifyManager;
 
     @Override
     public Result<Void> updateById(JobConfig jobConfig) {
@@ -49,22 +45,8 @@ public class JobModifyServiceImpl implements JobModifyService {
             return Result.buildSucc(null);
         }
 
-        sendZkModifyReq(dbJobConfig);
+        appJobChangeNotifyManager.notifyChange(dbJobConfig.getApp());
 
         return Result.buildSucc(null);
-    }
-
-    public void sendZkModifyReq(JobConfig jobConfig) {
-
-        if (!jobConfig.isActivity()
-                || JobTriggerMode.PASSIVE.getCode().equals(jobConfig.getTriggerMode())) {
-            deleteJobHandler.submitAsyncTask(jobConfig);
-
-        } else {
-            JobModifyReq req = new JobModifyReq();
-            req.setNewVersion(jobConfig.getVersion());
-            req.setNewJobConfig(jobConfig);
-            modifyJobHandler.submitAsyncTask(req);
-        }
     }
 }

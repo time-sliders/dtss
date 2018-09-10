@@ -26,7 +26,7 @@ public interface JobConfigDAO {
      *
      * @param id 数据库ID
      */
-    JobConfig findById(String id);
+    JobConfig findById(Long id);
 
     /**
      * 根据id更新一调数据
@@ -40,5 +40,5 @@ public interface JobConfigDAO {
      */
     int insert(JobConfig jobConfig);
 
-    int deleteById(String id);
+    int deleteById(Long id);
 }

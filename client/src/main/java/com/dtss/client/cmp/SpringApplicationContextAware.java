@@ -23,6 +23,13 @@ public class SpringApplicationContextAware implements ApplicationContextAware {
     private static final String ZK_CMP_BEAN_NAME = "zooKeeperComponent";
 
     public static ZooKeeperComponent getZkCmp() {
+        while (springAc == null) {
+            try {
+                Thread.sleep(500L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         return springAc.getBean(ZK_CMP_BEAN_NAME, ZooKeeperComponent.class);
     }
 }

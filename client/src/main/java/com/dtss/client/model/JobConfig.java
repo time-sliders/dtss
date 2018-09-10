@@ -16,7 +16,7 @@ public class JobConfig implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    private Long id;
 
     /**
      * JOB名称
@@ -102,11 +102,11 @@ public class JobConfig implements Serializable {
      */
     private Date modifyTime;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -1,9 +1,7 @@
 package com.dtss.server.service.impl;
 
-import com.dtss.client.enums.JobTriggerMode;
 import com.dtss.client.model.JobConfig;
-import com.dtss.server.core.job.JobIdGenerator;
-import com.dtss.server.core.job.async.AddJobHandler;
+import com.dtss.server.core.zk.callback.AppJobChangeNotifyManager;
 import com.dtss.server.dao.JobConfigDAO;
 import com.dtss.server.service.JobAddService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ public class JobAddServiceImpl implements JobAddService {
     private JobConfigDAO jobConfigDAO;
 
     @Autowired
-    private AddJobHandler addJobHandler;
+    private AppJobChangeNotifyManager appJobChangeNotifyManager;
 
     @Override
     public boolean addJob(JobConfig jobConfig) {
@@ -31,13 +29,10 @@ public class JobAddServiceImpl implements JobAddService {
         }
 
         jobConfig.setVersion(0L);
-        jobConfig.setId(JobIdGenerator.generateJobId());
         int num = jobConfigDAO.insert(jobConfig);
 
         if (num > 0) {
-            if (jobConfig.isActivity() && jobConfig.getTriggerMode().equals(JobTriggerMode.AUTOMATIC.getCode())) {
-                addJobHandler.submitAsyncTask(jobConfig);
-            }
+            appJobChangeNotifyManager.notifyChange(jobConfig.getApp());
             return true;
         } else {
             return false;
