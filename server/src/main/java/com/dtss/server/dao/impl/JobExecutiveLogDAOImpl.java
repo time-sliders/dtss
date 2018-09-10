@@ -115,7 +115,6 @@ public class JobExecutiveLogDAOImpl extends SqlSessionDaoSupport implements JobE
         Assert.notNull(jobExecutiveLog.getJobBeanName());
         Assert.notNull(jobExecutiveLog.getJobId());
         Assert.notNull(jobExecutiveLog.getScheduleTime());
-        Assert.notNull(jobExecutiveLog.getSliceIndex());
         Assert.notNull(jobExecutiveLog.getTriggerServerIp());
 
     }

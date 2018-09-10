@@ -34,7 +34,6 @@ public class JobLogServiceImpl implements JobLogService {
         jobExecutiveLog.setJobBeanName(jobConfig.getJobBeanName());
         jobExecutiveLog.setJobId(jobConfig.getId());
         jobExecutiveLog.setName(jobConfig.getName());
-        jobExecutiveLog.setSliceIndex(0);
         jobExecutiveLog.setStatus(JobExeStatusEnum.PROCESSING.getCode());
         jobExecutiveLog.setStartTime(new Date());
 

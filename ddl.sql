@@ -49,8 +49,6 @@ CREATE TABLE dtss.job_executive_log (
   `app`               VARCHAR(32)     NOT NULL
   COMMENT 'JOB所属应用',
   schedule_time       BIGINT UNSIGNED NOT NULL,
-  slice_index         INT UNSIGNED             DEFAULT 0
-  COMMENT '任务分片索引',
   name                VARCHAR(64) COMMENT 'JOB名称',
   `job_bean_name`     VARCHAR(64)     NOT NULL
   COMMENT 'JOB 的 springBeanName',
@@ -75,7 +73,7 @@ CREATE TABLE dtss.job_executive_log (
   `modify_time`       DATETIME                 DEFAULT NULL
   COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY uk_job_executive_log (job_id, schedule_time, slice_index),
+  UNIQUE KEY uk_job_executive_log (job_id, schedule_time),
   KEY `idx_app` (`app`),
   KEY `idx_job_bean_name` (`job_bean_name`)
 )

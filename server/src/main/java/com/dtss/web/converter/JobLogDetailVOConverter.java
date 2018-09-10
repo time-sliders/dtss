@@ -32,7 +32,6 @@ public class JobLogDetailVOConverter extends AbstractObjectConverter<JobExecutiv
         vo.setJobExeResult(model.getJobExeResult());
         vo.setJobId(model.getJobId());
         vo.setParam(model.getParam());
-        vo.setSliceIndex(model.getSliceIndex());
         vo.setName(model.getName());
         JobExeStatusEnum statusEnum = JobExeStatusEnum.getByCode(model.getStatus());
         vo.setStatus(statusEnum.getName());

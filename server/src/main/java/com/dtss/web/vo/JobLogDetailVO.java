@@ -17,11 +17,6 @@ public class JobLogDetailVO {
     private String app;
 
     /**
-     * 任务分片索引
-     */
-    private Integer sliceIndex;
-
-    /**
      * JOB名称
      */
     private String name;
@@ -106,14 +101,6 @@ public class JobLogDetailVO {
 
     public void setStatusColor(String statusColor) {
         this.statusColor = statusColor;
-    }
-
-    public Integer getSliceIndex() {
-        return sliceIndex;
-    }
-
-    public void setSliceIndex(Integer sliceIndex) {
-        this.sliceIndex = sliceIndex;
     }
 
     public String getName() {

@@ -7,7 +7,6 @@
         <result column="job_id"  property="jobId"/>
         <result column="app"  property="app"/>
         <result column="schedule_time"  property="scheduleTime"/>
-        <result column="slice_index"  property="sliceIndex"/>
         <result column="name"  property="name"/>
         <result column="job_bean_name"  property="jobBeanName"/>
         <result column="trigger_server_ip"  property="triggerServerIp"/>
@@ -23,14 +22,14 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,job_id,app,schedule_time,slice_index,name,
+        id,job_id,app,schedule_time,name,
         job_bean_name,trigger_server_ip,execute_client_ip,
         start_time,finish_time,param,status,inner_msg,job_exe_result,
         create_time,modify_time
     </sql>
 
     <sql id="Base_Value_List">
-        #{id},#{jobId},#{app},#{scheduleTime},#{sliceIndex},#{name},
+        #{id},#{jobId},#{app},#{scheduleTime},#{name},
         #{jobBeanName},#{triggerServerIp},#{executeClientIp},
         #{startTime},#{finishTime},#{param},#{status},#{innerMsg},#{jobExeResult},
         #{createTime},#{modifyTime}
@@ -65,9 +64,6 @@
         </if>
         <if test="scheduleTime != null">
             and schedule_time=#{scheduleTime}
-        </if>
-        <if test="sliceIndex != null">
-            and slice_index=#{sliceIndex}
         </if>
         <if test="name != null and name != '' ">
             and name=#{name}

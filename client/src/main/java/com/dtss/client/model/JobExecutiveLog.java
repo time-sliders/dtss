@@ -27,11 +27,6 @@ public class JobExecutiveLog implements Serializable {
     private Long scheduleTime;
 
     /**
-     * 任务分片索引
-     */
-    private Integer sliceIndex;
-
-    /**
      * JOB名称
      */
     private String name;
@@ -123,14 +118,6 @@ public class JobExecutiveLog implements Serializable {
 
     public void setScheduleTime(Long scheduleTime) {
         this.scheduleTime = scheduleTime;
-    }
-
-    public Integer getSliceIndex() {
-        return sliceIndex;
-    }
-
-    public void setSliceIndex(Integer sliceIndex) {
-        this.sliceIndex = sliceIndex;
     }
 
     public String getName() {
