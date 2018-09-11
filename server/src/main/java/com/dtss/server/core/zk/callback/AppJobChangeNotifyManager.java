@@ -57,6 +57,7 @@ public class AppJobChangeNotifyManager implements ZookeeperPathConst {
                         watchChangeNotify(app, null);
                     }
                 });
+        zooKeeperComponent.createNodeRecursively(dtssRootNode);
     }
 
     //～～～～～～～～～～～～～～～～～～～watchChangeNotify～～～～～～～～～～～～～～～～～～～

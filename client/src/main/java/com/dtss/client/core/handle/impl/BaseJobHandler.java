@@ -26,14 +26,6 @@ public abstract class BaseJobHandler implements JobHandler, ApplicationContextAw
         this.ac = applicationContext;
     }
 
-    protected void startProcessing(Long logId) {
-        JobExecutiveLog log = new JobExecutiveLog();
-        log.setId(logId);
-        log.setExecuteClientIp(IPUtils.getLocalIp());
-        log.setStatus(JobExeStatusEnum.PROCESSING.getCode());
-        jobLogFacade.endLog(log);
-    }
-
     protected void failJob(Long logId, String innerMsg) {
         JobExecutiveLog log = new JobExecutiveLog();
         log.setId(logId);

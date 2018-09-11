@@ -38,7 +38,6 @@ public class JobLogFacadeImpl implements JobLogFacade {
 
     @Override
     public Result<Boolean> endLog(JobExecutiveLog log) {
-
         try {
             jobLogService.endLog(log);
             return Result.buildSucc(true);

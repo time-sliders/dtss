@@ -8,7 +8,7 @@
 	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 
     <context:annotation-config/>
-    <context:component-scan base-package="com.dtss"/>
+    <context:component-scan base-package="com.dtss.web.controller"/>
 
     <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
         <mvc:message-converters register-defaults="true">

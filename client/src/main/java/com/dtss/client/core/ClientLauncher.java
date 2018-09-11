@@ -181,6 +181,7 @@ public class ClientLauncher implements InitializingBean, ZookeeperPathConst, Zoo
                     submitAllTask(children);
                     break;
                 default:
+                    logger.info("++++++++"+code.name());
             }
         }
     };
