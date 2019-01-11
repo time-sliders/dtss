@@ -11,7 +11,6 @@
 	<artifactId>dtss-server</artifactId>
 	<packaging>war</packaging>
 
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -56,5 +55,9 @@
 			<version>1.0.14</version>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<finalName>dtss</finalName>
+	</build>
 
 </project>
